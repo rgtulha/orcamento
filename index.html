@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Orçamento SUPPORTA</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Importa a fonte Montserrat do Google Fonts como alternativa para HK Grotesk -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
@@ -19,56 +21,56 @@
 
         <div id="budgetDocument" class="budget-document">
             <div class="budget-header-main">
-                <div class="company-logo-text">SUPPORTA</div>
+                <!-- Logo no canto esquerdo e grande -->
+                <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
                 <div class="company-slogan">Suporte em soluções de tecnologia para empresas.</div>
             </div>
 
-            <div class="budget-meta-client-info">
-                <div class="budget-meta-block">
+            <div class="budget-details-section">
+                <div class="budget-info-left">
                     <div class="budget-title-label">Orçamento</div>
-                    <div class="budget-date-number">
-                        <div class="budget-date" id="currentDate"></div>
-                        <div class="budget-number">nº <span id="budgetNumber"></span></div>
-                    </div>
-                </div>
-
-                <div class="client-details-block">
-                    <!-- Estes campos podem ser editáveis ou preenchidos via JS se necessário -->
                     <p class="client-line">Cliente: <span id="clientName">VENETO INTERIORES REPRESENTACÕES E SERVIÇOS LTDA</span></p>
                     <p class="client-line">CNPJ/CPF: <span id="clientCnpjCpf">03.368.082/0001-10</span></p>
                     <p class="contact-line">E-mail: atendimento@supporta.tec.br</p>
                     <p class="contact-line">https://loja.supporta.tec.br</p>
                     <p class="contact-line">Contato: (62) 98179-5686</p>
                 </div>
+
+                <div class="budget-info-right">
+                    <div class="budget-date" id="currentDate"></div>
+                    <div class="budget-number">nº <span id="budgetNumber"></span></div>
+                </div>
             </div>
 
             <table class="product-table">
                 <thead>
                     <tr>
-                        <th>Nº</th>
-                        <th>Descrição do Produto</th>
-                        <th>Preço</th>
-                        <th>Qt.</th>
-                        <th>Total</th>
+                        <th class="col-num">Nº</th>
+                        <th class="col-description">Descrição do Produto</th>
+                        <th class="col-price">Preço</th>
+                        <th class="col-quantity">Qt.</th>
+                        <th class="col-total">Total</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
                     <!-- Products will be added here dynamically by JavaScript -->
                 </tbody>
-                <tfoot>
-                    <tr class="discount-row">
-                        <td colspan="4" class="text-right">Desconto:</td>
-                        <td class="price">R$ <span id="discountAmount">0,00</span></td>
-                    </tr>
-                    <tr class="total-row">
-                        <td colspan="4" class="text-right">Total</td>
-                        <td class="price">R$ <span id="grandTotal">0,00</span></td>
-                    </tr>
-                </tfoot>
             </table>
 
-            <div class="payment-info">
-                <p>Forma de pagamento: <span id="paymentMethod">à vista.</span></p>
+            <div class="summary-section">
+                <div class="payment-info">
+                    <p>Forma de pagamento: <span id="paymentMethod">à vista.</span></p>
+                </div>
+                <div class="total-boxes-container">
+                    <div class="summary-box discount-box">
+                        <span>Desconto</span>
+                        <span class="value">R$ <span id="discountAmount">0,00</span></span>
+                    </div>
+                    <div class="summary-box grand-total-box">
+                        <span>Total</span>
+                        <span class="value">R$ <span id="grandTotal">0,00</span></span>
+                    </div>
+                </div>
             </div>
 
             <div class="budget-footer-address">
