@@ -460,18 +460,26 @@ body {
 }
 
 /* Client List Modal Specifics */
-#client-list-search {
-    width: calc(100% - 120px); /* Ajusta para caber o botão ao lado */
+.client-list-controls {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os elementos */
+    margin-bottom: 15px; /* Espaço abaixo dos controles */
+    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+}
+.client-list-controls input[type="text"] {
+    flex-grow: 1; /* Input ocupa o espaço disponível */
+    min-width: 150px; /* Largura mínima para o input */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-bottom: 10px;
+    box-sizing: border-box; /* Garante que padding e borda não aumentem o tamanho total */
 }
-#addNewClientFromListBtn {
-    margin-left: 10px;
+.client-list-controls button {
+    flex-shrink: 0; /* Botões não encolhem */
     padding: 8px 12px;
     font-size: 0.9em;
 }
+
 
 .client-list {
     list-style: none;
@@ -491,6 +499,10 @@ body {
 }
 .client-list-row:last-child {
     border-bottom: none;
+}
+.client-list-row .no-data {
+    font-style: italic;
+    color: #777;
 }
 .client-name-display {
     font-weight: bold;
