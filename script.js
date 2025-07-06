@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const budgetClientCnpjCpfSpan = document.getElementById('budgetClientCnpjCpfSpan');
 
     // --- Firebase/Client Management Elements ---
-    const selectClientBtn = document.getElementById('selectClientBtn'); // Novo botão para abrir modal de clientes
+    const selectClientBtn = document.getElementById('selectClientBtn'); // Botão para abrir modal de clientes
 
     // Autenticação
     const accessAuthBtn = document.getElementById('accessAuthBtn');
@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const listClientsModal = document.getElementById('listClientsModal');
     const closeListClientsModalBtn = listClientsModal.querySelector('.close-button');
     const clientListSearchInput = document.getElementById('client-list-search');
+    const searchClientListBtn = document.getElementById('searchClientListBtn'); // NOVO: Botão Buscar Clientes na Lista
     const clientsTable = document.getElementById('clients-table'); // A lista de clientes
     const clientListArea = document.getElementById('client-list-area');
 
@@ -75,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Variáveis de Controle ---
     let productsInBudget = [];
     let nextProductNumber = 1;
-    let listSearchTimeout;
+    let listSearchTimeout; // Para o debounce da busca de clientes
     let currentClientBeingEdited = null; // Para armazenar o normalizedName do cliente sendo editado
 
-    // --- Funções Auxiliares (Mescladas) ---
+    // --- Funções Auxiliares ---
 
     /**
      * Formata um número como string de moeda brasileira (Real).
@@ -233,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // --- Funções do Firebase (Conforme seu script, adaptadas) ---
+    // --- Funções do Firebase ---
 
     // FUNÇÃO PARA ABRIR QUALQUER MODAL
     const openModal = (modalElement) => {
@@ -248,10 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
         listClientsModal.classList.remove('active');
     };
 
-    // Lógica de Autenticação - Adapta o updateUI
+    // Lógica de Autenticação
     const updateUI = (user) => {
-        // No contexto do gerador de orçamento, manteremos a UI principal sempre visível,
-        // mas as funcionalidades de cliente dependem do login.
         if (user) {
             authStatus.textContent = `Logado como: ${user.email}`;
             accessAuthBtn.style.display = 'none';
@@ -388,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Listeners de Eventos (Mesclados) ---
+    // --- Listeners de Eventos ---
 
     // Listener de evento para o botão "Buscar" de produtos
     searchProductBtn.addEventListener('click', () => {
@@ -557,7 +556,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Busca de Cliente no Modal
+    // Lógica do botão Buscar Clientes na Lista
+    searchClientListBtn.addEventListener('click', () => {
+        const searchTerm = clientListSearchInput.value.trim();
+        loadClientsList(searchTerm); // Força a busca imediatamente
+    });
+
+    // Busca de Cliente no Modal (em tempo real com debounce)
     clientListSearchInput.addEventListener('input', () => {
         clearTimeout(listSearchTimeout);
         const searchTerm = clientListSearchInput.value.trim();
