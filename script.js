@@ -13,7 +13,6 @@
 // O frontend então chamaria essa API de backend.
 
 // --- Mock Product Data (Simulação de Retorno da Busca de Fornecedores) ---
-// Estes dados simulam o que seu backend retornaria após buscar e comparar preços.
 const mockProducts = [
     {
         id: 'proc-intel-i9',
@@ -92,7 +91,7 @@ const DISCOUNT_VALUE = 300.00; // Desconto fixo conforme PDF de exemplo
  * @returns {string} A string de moeda formatada (ex: "R$ 1.234,56").
  */
 function formatCurrency(amount) {
-    return `R$ ${amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 /**
@@ -106,9 +105,8 @@ function updateTotals() {
 
     const finalTotal = subtotal - DISCOUNT_VALUE;
 
-    // Exibir valores formatados como moeda. O "R$" está no HTML.
-    discountAmountSpan.textContent = DISCOUNT_VALUE.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    grandTotalSpan.textContent = finalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    discountAmountSpan.textContent = formatCurrency(DISCOUNT_VALUE);
+    grandTotalSpan.textContent = formatCurrency(finalTotal);
 }
 
 /**
@@ -126,7 +124,7 @@ function renderSearchResults(results) {
         const resultItem = document.createElement('div');
         resultItem.classList.add('search-result-item');
         resultItem.innerHTML = `
-            <span>${product.description}</span> - <span class="price">${formatCurrency(product.price)}</span>
+            <span>${product.description}</span> - <span class="price">R$ ${formatCurrency(product.price)}</span>
             <button class="add-to-budget-btn" data-product-id="${product.id}" data-price="${product.price}" data-description="${product.description}">Adicionar</button>
         `;
         searchResultsDiv.appendChild(resultItem);
@@ -166,11 +164,11 @@ function addProductToBudget(productData) {
         const row = productTableBody.insertRow();
         row.dataset.productId = newProduct.id; // Armazena o ID do produto na linha para fácil busca
         row.innerHTML = `
-            <td>${newProduct.budgetNum}</td>
-            <td>${newProduct.description}</td>
-            <td class="price">${formatCurrency(newProduct.price)}</td>
-            <td class="product-quantity">${newProduct.quantity}</td>
-            <td class="price product-total">${formatCurrency(newProduct.total)}</td>
+            <td class="col-num">${newProduct.budgetNum}</td>
+            <td class="col-description">${newProduct.description}</td>
+            <td class="col-price">R$ ${formatCurrency(newProduct.price)}</td>
+            <td class="col-quantity">${newProduct.quantity}</td>
+            <td class="col-total product-total">R$ ${formatCurrency(newProduct.total)}</td>
         `;
     }
     updateTotals(); // Recalcula e exibe os totais
@@ -178,18 +176,14 @@ function addProductToBudget(productData) {
 
 /**
  * Configura os valores iniciais para o documento do orçamento, como data e número do orçamento.
- * Mantém 03/07/2025 para replicar o PDF de exemplo, e um número de orçamento aleatório.
  */
 function setupInitialBudgetValues() {
-    // Para replicar o PDF exatamente, a data será "03/07/2025".
-    // Se desejar a data atual, descomente as linhas abaixo e comente a linha `currentDateSpan.textContent`.
-    // const today = new Date();
-    // const day = String(today.getDate()).padStart(2, '0');
-    // const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês é 0-indexed
-    // const year = today.getFullYear();
-    // currentDateSpan.textContent = `${day}/${month}/${year}`;
-
-    currentDateSpan.textContent = `03/07/2025`; // Data fixa conforme PDF de exemplo
+    // A data deve ser gerada automaticamente
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês é 0-indexed
+    const year = today.getFullYear();
+    currentDateSpan.textContent = `${day}/${month}/${year}`;
 
     // Gera um número de orçamento simples e aleatório (ex: "101", "055", "012")
     budgetNumberSpan.textContent = String(Math.floor(Math.random() * 900) + 100); // Números de 100 a 999
@@ -237,53 +231,54 @@ generatePdfBtn.addEventListener('click', () => {
     searchProductBtn.style.display = 'none';
     searchResultsDiv.style.display = 'none';
     productSearchInput.style.display = 'none';
-    productSearchInput.parentElement.querySelector('h2').style.display = 'none'; // Esconde o título "Buscar Produto"
+    // O h2 "Buscar Produto" está dentro do parentElement do input
+    const searchSectionH2 = productSearchInput.parentElement.querySelector('h2');
+    if (searchSectionH2) {
+        searchSectionH2.style.display = 'none';
+    }
 
     // Define a escala para html2canvas para melhor resolução no PDF.
-    // 3x é geralmente bom para texto e clareza.
     const scale = 3;
 
     html2canvas(budgetDocument, {
         scale: scale,
-        useCORS: true, // Habilita se seu documento incluir imagens/recursos de outras origens
-        logging: false, // Defina como true para depurar problemas com html2canvas
-        windowWidth: budgetDocument.scrollWidth, // Captura a largura total do conteúdo
-        windowHeight: budgetDocument.scrollHeight // Captura a altura total do conteúdo
+        useCORS: true,
+        logging: false,
+        windowWidth: budgetDocument.scrollWidth,
+        windowHeight: budgetDocument.scrollHeight
     }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png'); // Obtém dados da imagem como PNG
+        const imgData = canvas.toDataURL('image/png');
 
-        // Inicializa o documento jsPDF com Portrait ('p'), milímetros ('mm'), tamanho A4
         const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
 
-        const pdfWidth = pdf.internal.pageSize.getWidth(); // Largura A4 em mm (210mm)
-        const pdfHeight = pdf.internal.pageSize.getHeight(); // Altura A4 em mm (297mm)
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
 
-        // Calcula as dimensões da imagem para caber na largura do PDF mantendo a proporção
         const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-        let heightLeft = imgHeight; // Altura restante a ser adicionada ao PDF
+        let heightLeft = imgHeight;
 
-        let position = 0; // Posição Y atual na página do PDF
+        let position = 0;
 
-        // Adiciona a primeira página da imagem
         pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdfHeight; // Diminui a altura restante em uma altura de página PDF
+        heightLeft -= pdfHeight;
 
-        // Se o conteúdo transbordar uma página, adiciona novas páginas
         while (heightLeft >= 0) {
-            position = heightLeft - imgHeight; // Calcula a posição para o próximo segmento da imagem
-            pdf.addPage(); // Adiciona uma nova página
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight); // Adiciona o segmento da imagem
-            heightLeft -= pdfHeight; // Diminui a altura restante
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
         }
 
-        pdf.save('Orcamento_SUPPORTA.pdf'); // Salva o arquivo PDF
+        pdf.save('Orcamento_SUPPORTA.pdf');
 
         // Mostra novamente os elementos da UI após a conclusão da geração do PDF
         generatePdfBtn.style.display = 'block';
         searchProductBtn.style.display = 'block';
         searchResultsDiv.style.display = 'block';
         productSearchInput.style.display = 'block';
-        productSearchInput.parentElement.querySelector('h2').style.display = 'block'; // Mostra o título novamente
+        if (searchSectionH2) {
+            searchSectionH2.style.display = 'block';
+        }
     });
 });
 
