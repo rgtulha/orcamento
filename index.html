@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
     <!-- Importa a fonte Montserrat do Google Fonts como alternativa para HK Grotesk -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDK (versão 8.10.1 conforme seu script) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -20,27 +25,28 @@
         </div>
 
         <div id="budgetDocument" class="budget-document">
-            <div class="header-top-row">
-                <!-- Logo no canto esquerdo e grande -->
-                <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
-                <div class="budget-title-and-date">
-                    <div class="budget-title-label">Orçamento</div>
-                    <div class="budget-date-number">
-                        <div class="budget-date" id="currentDate"></div>
-                        <div class="budget-number">nº <span id="budgetNumber"></span></div>
+            <div class="header-container">
+                <div class="header-left-col">
+                    <!-- Logo no canto esquerdo e grande -->
+                    <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
+                    <div class="client-contact-info">
+                        <!-- Estas são as SPANS de exibição, preenchidas via JS -->
+                        <p class="client-line">Cliente: <span id="budgetClientNameSpan"></span></p>
+                        <p class="client-line cnpj-line">CNPJ/CPF: <span id="budgetClientCnpjCpfSpan"></span></p>
+                        <p class="contact-line">E-mail: atendimento@supporta.tec.br</p>
+                        <p class="contact-line">https://loja.supporta.tec.br</p>
+                        <p class="contact-line">Contato: (62) 98179-5686</p>
                     </div>
+                </div>
+                <div class="header-right-col">
+                    <div class="budget-title-label">Orçamento</div>
+                    <div class="budget-date" id="currentDate"></div>
+                    <div class="budget-number">nº <span id="budgetNumber"></span></div>
                 </div>
             </div>
 
-            <div class="client-contact-section">
-                <div class="client-contact-info">
-                    <p class="client-line">Cliente: <span id="clientName">VENETO INTERIORES REPRESENTACÕES E SERVIÇOS LTDA</span></p>
-                    <p class="client-line cnpj-line">CNPJ/CPF: <span id="clientCnpjCpf">03.368.082/0001-10</span></p>
-                    <p class="contact-line">E-mail: atendimento@supporta.tec.br</p>
-                    <p class="contact-line">https://loja.supporta.tec.br</p>
-                    <p class="contact-line">Contato: (62) 98179-5686</p>
-                </div>
-            </div>
+            <!-- Botão para selecionar/adicionar cliente do Firebase -->
+            <button id="selectClientBtn" class="action-button">Adicionar/Selecionar Cliente</button>
 
             <table class="product-table">
                 <thead>
@@ -84,6 +90,65 @@
             </div>
         </div>
         <button id="generatePdfBtn">Gerar PDF</button>
+    </div>
+
+    <!-- Modais de Autenticação e Gerenciamento de Clientes -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Autenticação</h2>
+            <div id="auth-status">Por favor, faça login para acessar a O.S.</div>
+            <div class="auth-controls">
+                <button id="accessAuthBtn">Acessar</button>
+                <button id="logoutBtn" style="display:none;">Sair</button>
+            </div>
+            <div class="auth-form">
+                <input type="email" id="auth-email" placeholder="Email">
+                <input type="password" id="auth-password" placeholder="Senha">
+                <button id="loginBtn">Login</button>
+                <button id="registerBtn">Registrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="listClientsModal" class="modal">
+        <div class="modal-content large-modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Gerenciar Clientes</h2>
+
+            <!-- Área de Listagem de Clientes -->
+            <div id="client-list-area" class="modal-section">
+                <input type="text" id="client-list-search" placeholder="Buscar cliente por nome...">
+                <button id="addNewClientFromListBtn" class="action-button">+ Novo Cliente</button>
+                <ul id="clients-table" class="client-list"></ul>
+            </div>
+
+            <!-- Área para ADICIONAR NOVO Cliente -->
+            <div id="client-add-area" class="modal-section" style="display:none;">
+                <h3>Adicionar Novo Cliente</h3>
+                <input type="text" id="add-modal-cliente-nome" placeholder="Nome da Empresa" required>
+                <input type="text" id="add-modal-cliente-cnpj" placeholder="CNPJ/CPF">
+                <input type="text" id="add-modal-cliente-contato" placeholder="Contato">
+                <input type="text" id="add-modal-cliente-endereco" placeholder="Endereço">
+                <div class="modal-actions">
+                    <button id="saveNewClientBtn" class="action-button">Salvar Cliente</button>
+                    <button id="cancelAddClientBtn" class="action-button secondary">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Área de Edição de Cliente -->
+            <div id="client-edit-area" class="modal-section" style="display:none;">
+                <h3>Editar Cliente</h3>
+                <input type="text" id="edit-modal-cliente-nome" placeholder="Nome da Empresa" required>
+                <input type="text" id="edit-modal-cliente-cnpj" placeholder="CNPJ/CPF">
+                <input type="text" id="edit-modal-cliente-contato" placeholder="Contato">
+                <input type="text" id="edit-modal-cliente-endereco" placeholder="Endereço">
+                <div class="modal-actions">
+                    <button id="updateClientModalBtn" class="action-button">Atualizar Cliente</button>
+                    <button id="cancelEditClientBtn" class="action-button secondary">Cancelar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- CDNs for jsPDF and html2canvas libraries -->
