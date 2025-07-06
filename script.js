@@ -71,7 +71,8 @@ const productSearchInput = document.getElementById('productSearchInput');
 const searchProductBtn = document.getElementById('searchProductBtn');
 const searchResultsDiv = document.getElementById('searchResults');
 const productTableBody = document.getElementById('productTableBody');
-const discountAmountSpan = document.getElementById('discountAmount');
+const subtotalAmountSpan = document.getElementById('subtotalAmount'); // Novo elemento para o subtotal
+const discountInput = document.getElementById('discountInput'); // Input para o desconto
 const grandTotalSpan = document.getElementById('grandTotal');
 const generatePdfBtn = document.getElementById('generatePdfBtn');
 const budgetDocument = document.getElementById('budgetDocument');
@@ -81,14 +82,14 @@ const budgetNumberSpan = document.getElementById('budgetNumber');
 // --- Variáveis de Estado ---
 let productsInBudget = [];
 let nextProductNumber = 1; // Para a coluna 'Nº' da tabela do orçamento
-const DISCOUNT_VALUE = 300.00; // Desconto fixo conforme PDF de exemplo
+
 
 // --- Funções Utilitárias ---
 
 /**
  * Formata um número como string de moeda brasileira (Real).
  * @param {number} amount - O valor numérico a ser formatado.
- * @returns {string} A string de moeda formatada (ex: "R$ 1.234,56").
+ * @returns {string} A string de moeda formatada (ex: "1.234,56").
  */
 function formatCurrency(amount) {
     return amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -103,9 +104,11 @@ function updateTotals() {
         subtotal += product.price * product.quantity;
     });
 
-    const finalTotal = subtotal - DISCOUNT_VALUE;
+    const discountValue = parseFloat(discountInput.value) || 0; // Pega o valor do input de desconto
+    const finalTotal = subtotal - discountValue;
 
-    discountAmountSpan.textContent = formatCurrency(DISCOUNT_VALUE);
+    subtotalAmountSpan.textContent = formatCurrency(subtotal); // Atualiza o subtotal
+    // discountAmountSpan.textContent = formatCurrency(discountValue); // O valor já está no input
     grandTotalSpan.textContent = formatCurrency(finalTotal);
 }
 
@@ -224,6 +227,10 @@ searchResultsDiv.addEventListener('click', (event) => {
     }
 });
 
+// Listener para o input de desconto (atualiza totais ao digitar)
+discountInput.addEventListener('input', updateTotals);
+
+
 // Listener de evento para o botão "Gerar PDF"
 generatePdfBtn.addEventListener('click', () => {
     // Esconde elementos da UI que não devem aparecer no PDF
@@ -231,11 +238,15 @@ generatePdfBtn.addEventListener('click', () => {
     searchProductBtn.style.display = 'none';
     searchResultsDiv.style.display = 'none';
     productSearchInput.style.display = 'none';
-    // O h2 "Buscar Produto" está dentro do parentElement do input
+    // Esconde o h2 "Buscar Produto"
     const searchSectionH2 = productSearchInput.parentElement.querySelector('h2');
     if (searchSectionH2) {
         searchSectionH2.style.display = 'none';
     }
+    // Esconde o input de desconto, para que não apareça no PDF
+    discountInput.style.display = 'none';
+    // Mostra o valor do desconto como texto (se necessário, cria um span para isso no HTML)
+    // Para simplificar, o CSS já garante que o R$ apareça no input
 
     // Define a escala para html2canvas para melhor resolução no PDF.
     const scale = 3;
@@ -279,6 +290,7 @@ generatePdfBtn.addEventListener('click', () => {
         if (searchSectionH2) {
             searchSectionH2.style.display = 'block';
         }
+        discountInput.style.display = 'inline-block'; // Mostra o input de desconto novamente
     });
 });
 
