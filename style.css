@@ -118,67 +118,40 @@ body {
     gap: 15px;
 }
 
-/* Header Top Row (Logo, Orçamento Title, Date/Number) */
-.header-top-row {
+/* Header Container (Logo, Client Info, Budget Title, Date/Number) */
+.header-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Alinha o topo do logo com o topo do texto do orçamento */
+    align-items: flex-start; /* Alinha o topo das colunas */
     margin-bottom: 20px;
+}
+
+.header-left-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1; /* Ocupa o espaço disponível à esquerda */
+}
+
+.header-right-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alinha o conteúdo à direita */
+    text-align: right; /* Alinha o texto à direita */
+    flex: 1; /* Ocupa o espaço disponível à direita */
 }
 
 .company-logo {
-    max-width: 400px; /* Tamanho da logo aumentado conforme pedido */
+    max-width: 400px; /* Tamanho da logo aumentado */
     height: auto;
-    object-fit: contain; /* Garante que a imagem seja contida dentro das dimensões */
-}
-
-.budget-title-and-date {
-    display: flex;
-    flex-direction: column; /* Orçamento e data/número empilhados */
-    align-items: flex-end; /* Alinha tudo à direita */
-    text-align: right; /* Garante que o texto esteja à direita */
-}
-
-.budget-title-label {
-    font-size: 60pt; /* Aumentado o tamanho da fonte do orçamento */
-    font-weight: 700; /* Bold */
-    color: #333;
-    line-height: 1; /* Para um controle preciso do espaçamento */
-    margin-bottom: 5px; /* Espaçamento entre "Orçamento" e data */
-    padding-top: 0; /* Garante que não haja padding superior extra */
-}
-
-.budget-date-number {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.budget-date {
-    font-size: 20pt; /* Conforme pedido: fonte 20 */
-    font-weight: 700; /* Bold */
-    color: #333;
-    margin-bottom: 2px;
-}
-
-.budget-number {
-    font-size: 14pt;
-    font-weight: 700;
-    color: #333;
-}
-
-
-/* Client and Contact Info Section */
-.client-contact-section {
-    margin-bottom: 20px;
+    object-fit: contain;
+    margin-bottom: 15px; /* Espaço entre logo e dados do cliente */
 }
 
 .client-contact-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Mantém alinhamento à esquerda para as informações do cliente */
     font-family: 'Montserrat', sans-serif;
     font-weight: 300; /* Light */
+    margin-bottom: 20px; /* Espaço após informações do cliente */
 }
 
 .client-line, .contact-line {
@@ -189,6 +162,28 @@ body {
 .cnpj-line {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
 }
+
+.budget-title-label {
+    font-size: 60pt; /* Aumentado o tamanho da fonte do orçamento */
+    font-weight: 700; /* Bold */
+    color: #333;
+    line-height: 1;
+    margin-bottom: 5px; /* Espaçamento entre "Orçamento" e data */
+}
+
+.budget-date {
+    font-size: 20pt;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.budget-number {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #333;
+}
+
 
 /* Product Table */
 .product-table {
@@ -239,7 +234,7 @@ body {
 /* Summary Section (Payment, Subtotal, Discount, Grand Total) */
 .summary-section {
     display: flex;
-    justify-content: space-between; /* Distribui o pagamento à esquerda e os totais à direita */
+    justify-content: space-between;
     align-items: flex-end;
     margin-top: 30px;
 }
@@ -247,50 +242,50 @@ body {
 .payment-info {
     font-size: 9pt;
     font-weight: bold;
-    flex: 1; /* Ocupa o espaço à esquerda */
+    flex: 1;
 }
 
 .total-boxes-container {
     display: flex;
-    justify-content: flex-end; /* Alinha as caixas de totais à direita */
-    gap: 10px; /* Espaçamento entre as caixas de total/desconto */
-    flex-wrap: wrap; /* Permite quebrar linha em telas menores, embora para PDF seja fixo */
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .summary-box {
     padding: 8px 15px;
     border-radius: 4px;
     display: flex;
-    flex-direction: column; /* Label e valor empilhados */
-    align-items: center; /* Centraliza o texto e o valor dentro da caixa */
-    min-width: 150px; /* Largura mínima para as caixas de total */
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
     font-weight: 700;
     box-sizing: border-box;
-    text-align: center; /* Centraliza o texto */
+    text-align: center;
 }
 
-.summary-box span:first-child { /* Label (e.g., "Subtotal", "Desconto") */
+.summary-box span:first-child {
     font-size: 10pt;
     margin-bottom: 5px;
 }
 
-.summary-box .value, .discount-input-container { /* Valor (e.g., "R$ 0,00") */
-    font-size: 12pt; /* Tamanho para os valores */
+.summary-box .value, .discount-input-container {
+    font-size: 12pt;
     white-space: nowrap;
 }
 
 /* Specific box styles */
 .subtotal-box, .discount-box {
-    background-color: #f5f5f5; /* Fundo mais claro para subtotal e desconto */
+    background-color: #f5f5f5;
     color: #333;
     border: 1px solid #ddd;
 }
 
 .grand-total-box {
-    background-color: #212d42; /* Fundo escuro para o total final */
+    background-color: #212d42;
     color: white;
-    font-size: 14pt; /* Fonte maior para o total */
-    padding: 10px 18px; /* Padding ajustado para total */
+    font-size: 14pt;
+    padding: 10px 18px;
 }
 
 /* Style for discount input */
@@ -298,7 +293,7 @@ body {
     display: flex;
     align-items: center;
     font-size: 12pt;
-    color: #333; /* Cor do texto "R$" dentro da caixa de desconto */
+    color: #333;
 }
 
 #discountInput {
@@ -307,14 +302,13 @@ body {
     font-size: 12pt;
     font-weight: 700;
     color: #333;
-    width: 80px; /* Largura do input */
+    width: 80px;
     text-align: center;
     padding: 0;
-    margin-left: 5px; /* Espaçamento entre "R$" e o input */
+    margin-left: 5px;
 }
 #discountInput:focus {
     outline: none;
-    /* Adicione um estilo de foco sutil se desejar */
 }
 
 /* Footer Address */
@@ -342,4 +336,188 @@ body {
 
 #generatePdfBtn:hover {
     background-color: #0056b3;
+}
+
+/* Botão de Ação Geral */
+.action-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+    margin-top: 10px; /* Espaçamento acima do botão */
+}
+.action-button:hover {
+    background-color: #0056b3;
+}
+.action-button.secondary {
+    background-color: #6c757d; /* Cinza para botão secundário */
+}
+.action-button.secondary:hover {
+    background-color: #5a6268;
+}
+
+/* --- Modal Styles --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-content.large-modal-content {
+    max-width: 900px; /* Maior para o modal de clientes */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal h2, .modal h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.5em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-section {
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+}
+.modal-section:last-child {
+    border-bottom: none;
+}
+
+/* Auth Modal Specifics */
+.auth-controls, .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.auth-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.auth-form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.auth-form button:hover {
+    background-color: #0056b3;
+}
+#auth-status {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Client List Modal Specifics */
+#client-list-search {
+    width: calc(100% - 120px); /* Ajusta para caber o botão ao lado */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+#addNewClientFromListBtn {
+    margin-left: 10px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
+.client-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+.client-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #f5f5f5;
+}
+.client-list-row:last-child {
+    border-bottom: none;
+}
+.client-name-display {
+    font-weight: bold;
+}
+.client-actions button {
+    margin-left: 5px;
+    padding: 6px 10px;
+    font-size: 0.8em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.client-actions .select-btn { background-color: #28a745; color: white; } /* Green */
+.client-actions .edit-btn { background-color: #ffc107; color: #333; } /* Yellow */
+.client-actions .delete-btn { background-color: #dc3545; color: white; } /* Red */
+
+/* Add/Edit Client Forms */
+#client-add-area input, #client-edit-area input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
 }
