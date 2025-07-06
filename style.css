@@ -30,7 +30,7 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px; /* Reduzindo um pouco o gap entre seções */
 }
 
 /* Search Section Styles */
@@ -118,74 +118,76 @@ body {
     gap: 15px;
 }
 
-/* Header Section (Logo e Slogan) */
-.budget-header-main {
-    display: flex;
-    flex-direction: column; /* Logo e slogan empilhados */
-    align-items: flex-start;
-    margin-bottom: 25px; /* Espaçamento abaixo do cabeçalho */
-}
-
-.company-logo {
-    max-width: 250px; /* Tamanho da logo, ajuste conforme necessário */
-    height: auto;
-    margin-bottom: 5px; /* Espaçamento entre logo e slogan */
-}
-
-.company-slogan {
-    font-size: 9pt;
-    color: #555;
-}
-
-/* Section for "Orçamento" / Client Info (Left) and Date / Budget No. (Right) */
-.budget-details-section {
+/* Header Top Row (Logo, Orçamento Title, Date/Number) */
+.header-top-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: flex-start; /* Alinha o topo do logo com o topo do texto do orçamento */
     margin-bottom: 20px;
 }
 
-.budget-info-left {
-    flex: 1;
+.company-logo {
+    max-width: 400px; /* Tamanho da logo aumentado conforme pedido */
+    height: auto;
+    object-fit: contain; /* Garante que a imagem seja contida dentro das dimensões */
+}
+
+.budget-title-and-date {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300; /* Light para HK Grotesk Light */
+    flex-direction: column; /* Orçamento e data/número empilhados */
+    align-items: flex-end; /* Alinha tudo à direita */
+    text-align: right; /* Garante que o texto esteja à direita */
 }
 
 .budget-title-label {
-    font-size: 40pt; /* Conforme pedido: fonte 40 */
-    font-weight: 700; /* Bold para HK Grotesk Bold */
-    color: #333; /* Cor mais escura para o título */
-    margin-bottom: 15px; /* Espaçamento abaixo de "Orçamento" */
-    line-height: 1; /* Garante que não haja espaçamento extra vertical */
+    font-size: 60pt; /* Aumentado o tamanho da fonte do orçamento */
+    font-weight: 700; /* Bold */
+    color: #333;
+    line-height: 1; /* Para um controle preciso do espaçamento */
+    margin-bottom: 5px; /* Espaçamento entre "Orçamento" e data */
+    padding-top: 0; /* Garante que não haja padding superior extra */
 }
 
-.budget-info-right {
+.budget-date-number {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Alinha a data e o número do orçamento à direita */
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700; /* Bold para a data conforme pedido */
+    align-items: flex-end;
 }
 
 .budget-date {
     font-size: 20pt; /* Conforme pedido: fonte 20 */
+    font-weight: 700; /* Bold */
     color: #333;
-    margin-bottom: 5px; /* Espaçamento entre data e número do orçamento */
+    margin-bottom: 2px;
 }
 
 .budget-number {
-    font-size: 14pt; /* Ajustado para um bom contraste com a data */
+    font-size: 14pt;
+    font-weight: 700;
     color: #333;
+}
+
+
+/* Client and Contact Info Section */
+.client-contact-section {
+    margin-bottom: 20px;
+}
+
+.client-contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Mantém alinhamento à esquerda para as informações do cliente */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; /* Light */
 }
 
 .client-line, .contact-line {
     margin: 0;
-    line-height: 1.6; /* Espaçamento de linha ajustado para leitura */
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300; /* Light para HK Grotesk Light */
+    line-height: 1.6;
+}
+
+.cnpj-line {
+    margin-bottom: 10px; /* Espaço adicional após o CNPJ */
 }
 
 /* Product Table */
@@ -198,24 +200,24 @@ body {
 
 .product-table th,
 .product-table td {
-    border: none; /* Remove todas as bordas */
+    border: none;
     padding: 8px 10px;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid #eee; /* Linha sutil para separar as linhas */
+    border-bottom: 1px solid #eee;
 }
 
 .product-table th {
-    background-color: #212d42; /* Cor de fundo para a primeira linha (cabeçalho) */
-    color: white; /* Texto branco para contraste */
-    font-weight: 700; /* Bold para o cabeçalho */
+    background-color: #212d42;
+    color: white;
+    font-weight: 700;
     white-space: nowrap;
 }
 
 .product-table th:last-child,
 .product-table td:last-child {
-    background-color: #212d42; /* Fundo escuro para a coluna 'Total' */
-    color: white; /* Texto branco para contraste */
+    background-color: #212d42;
+    color: white;
 }
 
 .product-table td:nth-child(1) { /* Coluna Nº */
@@ -234,12 +236,12 @@ body {
     text-align: right;
 }
 
-/* Summary Section (Payment, Discount, Total) */
+/* Summary Section (Payment, Subtotal, Discount, Grand Total) */
 .summary-section {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end; /* Alinha o conteúdo ao final (bottom) */
-    margin-top: 30px; /* Espaçamento após a tabela */
+    justify-content: space-between; /* Distribui o pagamento à esquerda e os totais à direita */
+    align-items: flex-end;
+    margin-top: 30px;
 }
 
 .payment-info {
@@ -250,26 +252,37 @@ body {
 
 .total-boxes-container {
     display: flex;
-    flex-direction: column; /* Caixas de total empilhadas */
-    align-items: flex-end; /* Alinha as caixas à direita */
-    gap: 5px; /* Espaçamento entre as caixas de desconto e total */
+    justify-content: flex-end; /* Alinha as caixas de totais à direita */
+    gap: 10px; /* Espaçamento entre as caixas de total/desconto */
+    flex-wrap: wrap; /* Permite quebrar linha em telas menores, embora para PDF seja fixo */
 }
 
 .summary-box {
     padding: 8px 15px;
     border-radius: 4px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-width: 180px; /* Largura mínima para as caixas de total */
+    flex-direction: column; /* Label e valor empilhados */
+    align-items: center; /* Centraliza o texto e o valor dentro da caixa */
+    min-width: 150px; /* Largura mínima para as caixas de total */
     font-weight: 700;
     box-sizing: border-box;
+    text-align: center; /* Centraliza o texto */
 }
 
-.discount-box {
-    background-color: #f5f5f5; /* Fundo mais claro para o desconto */
-    color: #333;
+.summary-box span:first-child { /* Label (e.g., "Subtotal", "Desconto") */
     font-size: 10pt;
+    margin-bottom: 5px;
+}
+
+.summary-box .value, .discount-input-container { /* Valor (e.g., "R$ 0,00") */
+    font-size: 12pt; /* Tamanho para os valores */
+    white-space: nowrap;
+}
+
+/* Specific box styles */
+.subtotal-box, .discount-box {
+    background-color: #f5f5f5; /* Fundo mais claro para subtotal e desconto */
+    color: #333;
     border: 1px solid #ddd;
 }
 
@@ -280,18 +293,37 @@ body {
     padding: 10px 18px; /* Padding ajustado para total */
 }
 
-.summary-box .value {
-    margin-left: 20px; /* Espaçamento entre o label e o valor */
-    white-space: nowrap; /* Evita que o valor quebre a linha */
+/* Style for discount input */
+.discount-input-container {
+    display: flex;
+    align-items: center;
+    font-size: 12pt;
+    color: #333; /* Cor do texto "R$" dentro da caixa de desconto */
+}
+
+#discountInput {
+    border: none;
+    background: none;
+    font-size: 12pt;
+    font-weight: 700;
+    color: #333;
+    width: 80px; /* Largura do input */
+    text-align: center;
+    padding: 0;
+    margin-left: 5px; /* Espaçamento entre "R$" e o input */
+}
+#discountInput:focus {
+    outline: none;
+    /* Adicione um estilo de foco sutil se desejar */
 }
 
 /* Footer Address */
 .budget-footer-address {
-    margin-top: auto; /* Empurra o rodapé para o final do documento */
+    margin-top: auto;
     text-align: center;
     font-size: 8pt;
     color: #666;
-    padding-top: 30px; /* Espaçamento acima do endereço */
+    padding-top: 30px;
 }
 
 /* Generate PDF Button */
