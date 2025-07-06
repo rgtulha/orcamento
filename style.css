@@ -1,22 +1,24 @@
+/* Importa a fonte Montserrat do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap');
+
 /* General Body and Container Styles */
-/* Defines the page size for printing, though html2canvas captures DOM not print media directly */
 @page {
     size: A4;
-    margin: 0; /* No default margins for PDF capture, padding on .app-container will act as margin */
+    margin: 0;
 }
 
 body {
-    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-family: 'Montserrat', sans-serif; /* Usando Montserrat como alternativa */
     margin: 0;
     padding: 20px;
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align at the top, not center */
+    align-items: flex-start;
     min-height: 100vh;
     box-sizing: border-box;
     color: #333;
-    font-size: 10pt; /* Base font size for the entire document */
+    font-size: 10pt; /* Base font size */
 }
 
 .app-container {
@@ -24,11 +26,11 @@ body {
     max-width: 210mm;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    padding: 20mm; /* Simulates A4 margins. This padding will be captured in the PDF */
+    padding: 20mm; /* Simulates A4 margins */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Spacing between search section and budget document */
+    gap: 20px;
 }
 
 /* Search Section Styles */
@@ -38,7 +40,7 @@ body {
     border-radius: 5px;
     background-color: #f9f9f9;
     margin-bottom: 20px;
-    box-sizing: border-box; /* Include padding/border in element's total width and height */
+    box-sizing: border-box;
 }
 
 .search-section h2 {
@@ -49,7 +51,7 @@ body {
 }
 
 .search-section input[type="text"] {
-    width: calc(100% - 100px); /* Adjust width considering button */
+    width: calc(100% - 100px);
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ccc;
@@ -60,13 +62,13 @@ body {
 
 .search-section button {
     padding: 8px 15px;
-    background-color: #007bff; /* Standard blue */
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9em;
-    vertical-align: top; /* Align with input field */
+    vertical-align: top;
 }
 
 .search-section button:hover {
@@ -75,11 +77,11 @@ body {
 
 .search-results {
     margin-top: 15px;
-    max-height: 200px; /* Limit height for scrollability */
+    max-height: 200px;
     overflow-y: auto;
     border-top: 1px solid #eee;
     padding-top: 10px;
-    display: block; /* Default display, will be hidden by JS for PDF gen */
+    display: block;
 }
 
 .search-result-item {
@@ -87,7 +89,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
-    border-bottom: 1px dashed #eee; /* Subtle separator */
+    border-bottom: 1px dashed #eee;
     font-size: 0.9em;
 }
 
@@ -98,7 +100,7 @@ body {
 .search-result-item button {
     padding: 5px 10px;
     font-size: 0.8em;
-    background-color: #28a745; /* Green for add button */
+    background-color: #28a745;
 }
 
 .search-result-item button:hover {
@@ -107,171 +109,189 @@ body {
 
 /* Budget Document Styling - Matches Oramento-ex.pdf */
 .budget-document {
-    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: #333;
-    font-size: 9pt; /* Slightly smaller base font size for budget content for better fit */
+    font-size: 9pt;
     line-height: 1.4;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Spacing between main sections like header, table, payment info */
+    gap: 15px;
 }
 
-/* Header Section */
+/* Header Section (Logo e Slogan) */
 .budget-header-main {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Logo e slogan empilhados */
     align-items: flex-start;
-    margin-bottom: 15px; /* Spacing below the company info */
+    margin-bottom: 25px; /* Espaçamento abaixo do cabeçalho */
 }
 
-.company-logo-text {
-    font-size: 20pt;
-    font-weight: bold;
-    color: #004d99; /* Darker blue shade, sampled from the PDF example */
-    margin-bottom: 2px;
+.company-logo {
+    max-width: 250px; /* Tamanho da logo, ajuste conforme necessário */
+    height: auto;
+    margin-bottom: 5px; /* Espaçamento entre logo e slogan */
 }
 
 .company-slogan {
     font-size: 9pt;
-    color: #555; /* Slightly lighter grey for slogan */
+    color: #555;
 }
 
-/* Meta and Client Info Section */
-.budget-meta-client-info {
+/* Section for "Orçamento" / Client Info (Left) and Date / Budget No. (Right) */
+.budget-details-section {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Align top of blocks */
-    margin-bottom: 20px; /* Spacing before the product table */
+    align-items: flex-start;
+    margin-bottom: 20px;
 }
 
-.budget-meta-block {
-    flex: 1; /* Takes equal space as client-details-block */
+.budget-info-left {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; /* Light para HK Grotesk Light */
 }
 
 .budget-title-label {
-    font-size: 14pt;
-    font-weight: bold;
-    margin-bottom: 5px;
+    font-size: 40pt; /* Conforme pedido: fonte 40 */
+    font-weight: 700; /* Bold para HK Grotesk Bold */
+    color: #333; /* Cor mais escura para o título */
+    margin-bottom: 15px; /* Espaçamento abaixo de "Orçamento" */
+    line-height: 1; /* Garante que não haja espaçamento extra vertical */
 }
 
-.budget-date-number {
-    font-size: 10pt;
+.budget-info-right {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end; /* Alinha a data e o número do orçamento à direita */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Bold para a data conforme pedido */
 }
 
-.budget-date, .budget-number {
-    font-weight: normal;
-    margin-top: 2px;
+.budget-date {
+    font-size: 20pt; /* Conforme pedido: fonte 20 */
+    color: #333;
+    margin-bottom: 5px; /* Espaçamento entre data e número do orçamento */
 }
 
-.client-details-block {
-    flex: 1; /* Takes equal space as budget-meta-block */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* Align client details to the right */
-    text-align: right;
-    font-size: 9pt;
+.budget-number {
+    font-size: 14pt; /* Ajustado para um bom contraste com a data */
+    color: #333;
 }
 
 .client-line, .contact-line {
-    margin: 0; /* Remove default paragraph margins */
-    line-height: 1.3; /* Adjust line spacing for client info */
+    margin: 0;
+    line-height: 1.6; /* Espaçamento de linha ajustado para leitura */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; /* Light para HK Grotesk Light */
 }
 
 /* Product Table */
 .product-table {
     width: 100%;
-    border-collapse: collapse; /* Remove space between cells */
+    border-collapse: collapse;
     margin-top: 20px;
     font-size: 9pt;
 }
 
 .product-table th,
 .product-table td {
-    border: 1px solid #ddd; /* Light grey borders for table cells */
-    padding: 8px 10px; /* Internal padding for cells */
+    border: none; /* Remove todas as bordas */
+    padding: 8px 10px;
     text-align: left;
-    vertical-align: top; /* Align content to the top in cells */
+    vertical-align: top;
+    border-bottom: 1px solid #eee; /* Linha sutil para separar as linhas */
 }
 
 .product-table th {
-    background-color: #f5f5f5; /* Light grey background for headers */
-    font-weight: bold;
-    white-space: nowrap; /* Prevent headers from wrapping too much if content is short */
+    background-color: #212d42; /* Cor de fundo para a primeira linha (cabeçalho) */
+    color: white; /* Texto branco para contraste */
+    font-weight: 700; /* Bold para o cabeçalho */
+    white-space: nowrap;
 }
 
-.product-table td.price,
-.product-table th:nth-child(3), /* Price column header */
-.product-table th:nth-child(4), /* Quantity column header */
-.product-table th:nth-child(5) { /* Total column header */
-    text-align: right;
-    white-space: nowrap; /* Keep prices/quantities on single line */
+.product-table th:last-child,
+.product-table td:last-child {
+    background-color: #212d42; /* Fundo escuro para a coluna 'Total' */
+    color: white; /* Texto branco para contraste */
 }
 
-.product-table td:nth-child(1) { /* Nº column */
-    width: 30px; /* Fixed width for number column */
+.product-table td:nth-child(1) { /* Coluna Nº */
+    width: 30px;
     text-align: center;
 }
-.product-table td:nth-child(4) { /* Quantity column */
-    width: 40px; /* Fixed width for quantity column */
-    text-align: center;
-}
-.product-table td:nth-child(3),
-.product-table td:nth-child(5) { /* Price and Total columns */
-    width: 80px; /* Fixed width for price and total columns */
-}
-
-/* Table Footer (Discount and Total) */
-.product-table tfoot td {
-    border: none; /* No borders for discount/total rows as per example PDF */
-    padding-top: 5px; /* Spacing above discount row */
-    padding-bottom: 5px; /* Spacing below total row */
-}
-
-.discount-row td, .total-row td {
-    padding: 5px 10px; /* Specific padding for these rows */
-}
-
-.discount-row .text-right, .total-row .text-right {
+.product-table td:nth-child(3), /* Coluna Preço */
+.product-table td:nth-child(4), /* Coluna Qt. */
+.product-table td:nth-child(5) { /* Coluna Total */
     text-align: right;
-    font-weight: bold;
-    padding-right: 10px; /* Space between text and amount */
+    white-space: nowrap;
 }
-
-.total-row .text-right {
-    font-size: 1.1em; /* Slightly larger font for final total text */
-    font-weight: bold;
-}
-
-.discount-row .price, .total-row .price {
-    font-weight: bold;
+.product-table th:nth-child(3), /* Header Preço */
+.product-table th:nth-child(4), /* Header Qt. */
+.product-table th:nth-child(5) { /* Header Total */
     text-align: right;
-    font-size: 1.1em; /* Slightly larger font for final total amount */
 }
 
-/* Payment Info */
+/* Summary Section (Payment, Discount, Total) */
+.summary-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Alinha o conteúdo ao final (bottom) */
+    margin-top: 30px; /* Espaçamento após a tabela */
+}
+
 .payment-info {
-    margin-top: 20px; /* Spacing below table */
     font-size: 9pt;
     font-weight: bold;
+    flex: 1; /* Ocupa o espaço à esquerda */
+}
+
+.total-boxes-container {
+    display: flex;
+    flex-direction: column; /* Caixas de total empilhadas */
+    align-items: flex-end; /* Alinha as caixas à direita */
+    gap: 5px; /* Espaçamento entre as caixas de desconto e total */
+}
+
+.summary-box {
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 180px; /* Largura mínima para as caixas de total */
+    font-weight: 700;
+    box-sizing: border-box;
+}
+
+.discount-box {
+    background-color: #f5f5f5; /* Fundo mais claro para o desconto */
+    color: #333;
+    font-size: 10pt;
+    border: 1px solid #ddd;
+}
+
+.grand-total-box {
+    background-color: #212d42; /* Fundo escuro para o total final */
+    color: white;
+    font-size: 14pt; /* Fonte maior para o total */
+    padding: 10px 18px; /* Padding ajustado para total */
+}
+
+.summary-box .value {
+    margin-left: 20px; /* Espaçamento entre o label e o valor */
+    white-space: nowrap; /* Evita que o valor quebre a linha */
 }
 
 /* Footer Address */
 .budget-footer-address {
-    margin-top: auto; /* Pushes the footer to the bottom of the budget document */
+    margin-top: auto; /* Empurra o rodapé para o final do documento */
     text-align: center;
     font-size: 8pt;
-    color: #666; /* Lighter grey for footer text */
-}
-
-/* General Utility Classes */
-.text-right {
-    text-align: right !important; /* Force right alignment */
+    color: #666;
+    padding-top: 30px; /* Espaçamento acima do endereço */
 }
 
 /* Generate PDF Button */
@@ -284,7 +304,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1.1em;
-    align-self: center; /* Center the button within the app-container flex column */
+    align-self: center;
     transition: background-color 0.2s ease;
 }
 
