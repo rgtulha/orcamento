@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang=\"pt-BR\">
+<head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Gerador de Orçamento SUPPORTA</title>
+    <link rel=\"stylesheet\" href=\"style.css\">
+</head>
+<body>
+    <div class=\"app-container\">
+        <div class=\"search-section\">
+            <h2>Buscar Produto</h2>
+            <input type=\"text\" id=\"productSearchInput\" placeholder=\"Digite o nome do produto...\">
+            <button id=\"searchProductBtn\">Buscar</button>
+            <div id=\"searchResults\" class=\"search-results\">
+                <!-- Search results will be displayed here dynamically -->
+            </div>
+        </div>
+
+        <div id=\"budgetDocument\" class=\"budget-document\">
+            <div class=\"budget-header-main\">
+                <div class=\"company-logo-text\">SUPPORTA</div>
+                <div class=\"company-slogan\">Suporte em soluções de tecnologia para empresas.</div>
+            </div>
+
+            <div class=\"budget-meta-client-info\">
+                <div class=\"budget-meta-block\">
+                    <div class=\"budget-title-label\">Orçamento</div>
+                    <div class=\"budget-date-number\">
+                        <div class=\"budget-date\" id=\"currentDate\"></div>
+                        <div class=\"budget-number\">nº <span id=\"budgetNumber\"></span></div>
+                    </div>
+                </div>
+
+                <div class=\"client-details-block\">
+                    <p class=\"client-line\">Cliente: <span id=\"clientName\">VENETO INTERIORES REPRESENTACÕES E SERVIÇOS LTDA</span></p>
+                    <p class=\"client-line\">CNPJ/CPF: <span id=\"clientCnpjCpf\">03.368.082/0001-10</span></p>
+                    <p class=\"contact-line\">E-mail: atendimento@supporta.tec.br</p>
+                    <p class=\"contact-line\">https://loja.supporta.tec.br</p>
+                    <p class=\"contact-line\">Contato: (62) 98179-5686</p>
+                </div>
+            </div>
+
+            <table class=\"product-table\">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Descrição do Produto</th>
+                        <th>Preço</th>
+                        <th>Qt.</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id=\"productTableBody\">
+                    <!-- Products will be added here dynamically by JavaScript -->
+                </tbody>
+                <tfoot>
+                    <tr class=\"discount-row\">
+                        <td colspan=\"4\" class=\"text-right\">Desconto:</td>
+                        <td class=\"price\">R$ <span id=\"discountAmount\">0,00</span></td>
+                    </tr>
+                    <tr class=\"total-row\">
+                        <td colspan=\"4\" class=\"text-right\">Total</td>
+                        <td class=\"price\">R$ <span id=\"grandTotal\">0,00</span></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class=\"payment-info\">
+                <p>Forma de pagamento: <span id=\"paymentMethod\">à vista.</span></p>
+            </div>
+
+            <div class=\"budget-footer-address\">
+                <p>Av. Portugal, n° 1148, Sala C2501, Cond. Orion Business - CNPJ: 45.258.581/0001-02</p>
+            </div>
+        </div>
+        <button id=\"generatePdfBtn\">Gerar PDF</button>
+    </div>
+
+    <!-- CDN for jsPDF and html2canvas libraries -->
+    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js\"></script>
+    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js\"></script>
+    <script src=\"script.js\"></script>
+</body>
+</html>
+
+
+
+
+
