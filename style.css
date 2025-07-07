@@ -122,7 +122,7 @@ body {
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Alinha o topo das colunas */
+    align-items: flex-end; /* Alinha o conteúdo à parte inferior (logo e bloco de orçamento/data) */
     margin-bottom: 20px;
 }
 
@@ -130,7 +130,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    flex: 1; /* Ocupa o espaço disponível à esquerda */
+    flex-basis: 50%; /* Dá uma base de 50% */
+    max-width: 50%; /* Garante que não exceda 50% */
 }
 
 .header-right-col {
@@ -138,7 +139,8 @@ body {
     flex-direction: column;
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
-    flex: 1; /* Ocupa o espaço disponível à direita */
+    flex-basis: 50%; /* Dá uma base de 50% */
+    max-width: 50%; /* Garante que não exceda 50% */
 }
 
 .company-logo {
@@ -164,10 +166,10 @@ body {
 }
 
 .budget-title-label {
-    font-size: 60pt; /* Aumentado o tamanho da fonte do orçamento */
+    font-size: 48pt; /* Aumentado o tamanho da fonte do orçamento */
     font-weight: 700; /* Bold */
     color: #333;
-    line-height: 1;
+    line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
     margin-bottom: 5px; /* Espaçamento entre "Orçamento" e data */
 }
 
@@ -462,22 +464,25 @@ body {
 /* Client List Modal Specifics */
 .client-list-controls {
     display: flex;
+    flex-wrap: wrap; /* Permite quebrar linha se o espaço for insuficiente */
     gap: 10px; /* Espaçamento entre os elementos */
     margin-bottom: 15px; /* Espaço abaixo dos controles */
-    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+    align-items: center; /* Alinha verticalmente no centro */
 }
 .client-list-controls input[type="text"] {
-    flex-grow: 1; /* Input ocupa o espaço disponível */
-    min-width: 150px; /* Largura mínima para o input */
+    flex: 1 1 200px; /* Cresce e encolhe, com base mínima de 200px */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Garante que padding e borda não aumentem o tamanho total */
+    box-sizing: border-box;
+    /* Remover margens e larguras explícitas que conflitem com flex */
 }
 .client-list-controls button {
     flex-shrink: 0; /* Botões não encolhem */
     padding: 8px 12px;
     font-size: 0.9em;
+    height: 38px; /* Altura fixa para alinhar com o input */
+    box-sizing: border-box;
 }
 
 
@@ -500,9 +505,11 @@ body {
 .client-list-row:last-child {
     border-bottom: none;
 }
-.client-list-row .no-data {
+.client-list-row .no-data { /* Para mensagens como "Nenhum cliente encontrado" */
     font-style: italic;
     color: #777;
+    width: 100%; /* Garante que a mensagem ocupe toda a largura */
+    text-align: center;
 }
 .client-name-display {
     font-weight: bold;
