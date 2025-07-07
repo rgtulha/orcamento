@@ -61,10 +61,11 @@ body {
 
 .header-right-col {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Pilha vertical */
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
+    padding-top: 5px; /* Ajuste para alinhamento vertical com a logo/empresa */
 }
 
 .company-logo {
@@ -74,9 +75,6 @@ body {
     margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
 }
 
-/* A palavra "Orçamento" não está mais aqui diretamente na coluna esquerda */
-/* .budget-title-label { ... } */
-
 .client-contact-info {
     font-family: 'Montserrat', sans-serif;
     font-weight: 300; /* Light */
@@ -84,7 +82,7 @@ body {
     margin-bottom: 20px; /* Espaço após informações do cliente */
 }
 
-/* NOVO: Estilo para os dados do cliente e da empresa dentro de .client-contact-info */
+/* Estilo para os dados do cliente e da empresa dentro de .client-contact-info */
 .client-contact-info p {
     font-size: 11pt; /* Aumenta o tamanho da fonte */
     color: #212d42;  /* Nova cor da fonte */
@@ -97,33 +95,27 @@ body {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
 }
 
-/* NOVO: Estilo para alinhar Orçamento e Data horizontalmente */
-.budget-title-and-date-row {
-    display: flex;
-    justify-content: space-between; /* Espaço entre Orçamento e Data */
-    align-items: baseline; /* Alinha o texto na linha de base */
-    width: 100%; /* Garante que ocupe a largura total disponível */
-    margin-bottom: 5px; /* Espaço entre esta linha e o número do orçamento */
-}
-
+/* Orçamento, Data e Nº O.S. agora são tratados individualmente dentro de .header-right-col */
 .budget-title-label {
     font-size: 28pt; /* Tamanho da fonte do orçamento */
     font-weight: 700; /* Bold */
     color: #333;
     line-height: 1.1;
+    margin-bottom: 10px; /* Espaço abaixo de Orçamento */
 }
 
 .budget-date {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
+    margin-bottom: 5px; /* Espaço abaixo da Data */
 }
 
 .budget-number {
     font-size: 14pt;
     font-weight: 700;
     color: #333;
-    margin-top: 5px; /* Espaço abaixo da data */
+    /* margin-top removido, espaçamento feito pelo margin-bottom dos elementos acima */
 }
 
 /* Main Action Buttons Container */
@@ -283,7 +275,7 @@ body {
     outline: none;
 }
 
-/* NOVO: Estilo para o endereço no rodapé */
+/* Estilo para o endereço no rodapé */
 .budget-footer-address {
     margin-top: auto;
     text-align: center;
