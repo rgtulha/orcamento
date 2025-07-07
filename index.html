@@ -18,10 +18,8 @@
         <div id="budgetDocument" class="budget-document">
             <div class="header-container">
                 <div class="header-left-col">
-                    <!-- Logo no canto esquerdo e grande -->
+                    <!-- Logo no canto esquerdo -->
                     <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
-                    <!-- Palavra Orçamento movida para cá, abaixo da logo -->
-                    <div class="budget-title-label">Orçamento</div>
                     <div class="client-contact-info">
                         <!-- Estas são as SPANS de exibição, preenchidas via JS -->
                         <p class="client-line">Cliente: <span id="budgetClientNameSpan"></span></p>
@@ -32,9 +30,13 @@
                     </div>
                 </div>
                 <div class="header-right-col">
-                    <!-- Informações de orçamento à direita -->
+                    <!-- Container para alinhar Orçamento e Data horizontalmente -->
+                    <div class="budget-title-and-date-row">
+                        <div class="budget-title-label">Orçamento</div>
+                        <div class="budget-date" id="currentDate"></div>
+                    </div>
+                    <!-- Número da O.S. abaixo da data -->
                     <div class="budget-number">nº <span id="budgetNumber"></span></div>
-                    <div class="budget-date" id="currentDate"></div>
                 </div>
             </div>
 
