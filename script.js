@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded - script.js iniciado.'); // Log de inicialização
+
     // --- Configuração e Inicialização do Firebase ---
     const firebaseConfig = {
         apiKey: "AIzaSyCmUoU3I9VXjL7YbT95EfUSBnxX3ZzXTII",
@@ -9,7 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         appId: "1:377095307784:web:4ce3007e49657bf3a607bd"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    try {
+        firebase.initializeApp(firebaseConfig);
+        console.log('Firebase inicializado com sucesso.'); // Log de Firebase
+    } catch (error) {
+        console.error('Erro ao inicializar Firebase:', error); // Erro de Firebase
+    }
+
     const db = firebase.firestore();
     const auth = firebase.auth();
 
@@ -169,25 +177,30 @@ document.addEventListener('DOMContentLoaded', () => {
         addProductModal.classList.remove('active');
     };
 
-    // Lógica de Autenticação
+    // Lógica de Autenticação - CRÍTICO para a visibilidade dos botões
     const updateUI = (user) => {
+        console.log('updateUI acionada. Status do usuário:', user ? user.email : 'Nenhum usuário logado'); // Log CRÍTICO
+
         if (user) {
             authStatus.textContent = `Logado como: ${user.email}`;
             accessAuthBtn.style.display = 'none';
             logoutBtn.style.display = 'inline-block';
             selectClientBtn.style.display = 'inline-block';
-            addProductBtn.style.display = 'inline-block'; // Mostrar botão de adicionar produto
+            addProductBtn.style.display = 'inline-block';
+            console.log('Botões (selectClientBtn, addProductBtn) definidos para: inline-block'); // Log CRÍTICO
         } else {
             authStatus.textContent = 'Por favor, faça login para acessar funcionalidades de cliente e orçamento.';
             accessAuthBtn.style.display = 'inline-block';
             logoutBtn.style.display = 'none';
             selectClientBtn.style.display = 'none';
-            addProductBtn.style.display = 'none'; // Esconder botão de adicionar produto
+            addProductBtn.style.display = 'none';
+            console.log('Botões (selectClientBtn, addProductBtn) definidos para: none'); // Log CRÍTICO
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
         }
     };
 
+    // Este listener é CRÍTICO: ele executa updateUI quando o status de autenticação muda.
     auth.onAuthStateChanged(updateUI);
 
     // Função para preencher os campos de exibição do cliente no orçamento
@@ -311,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         discountInput.style.display = 'none';
         selectClientBtn.style.display = 'none';
         addProductBtn.style.display = 'none'; // Esconder o botão de adicionar produto
+        console.log('PDF gerando. Botões principais temporariamente ocultos.'); // Log de PDF
 
         const scale = 3;
 
@@ -350,7 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
             discountInput.style.display = 'inline-block';
             if (auth.currentUser) {
                 selectClientBtn.style.display = 'inline-block';
-                addProductBtn.style.display = 'inline-block'; // Mostrar o botão de adicionar produto
+                addProductBtn.style.display = 'inline-block';
+                console.log('PDF gerado. Botões principais restaurados (se logado).'); // Log de PDF
+            } else {
+                 console.log('PDF gerado. Usuário deslogado, botões principais permanecerão ocultos.');
             }
         });
     });
@@ -365,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     selectClientBtn.addEventListener('click', () => {
+        console.log('Botão Adicionar/Selecionar Cliente clicado.'); // Log para debug
         if (!auth.currentUser) {
             alert('Faça login para gerenciar clientes.');
             return;
@@ -401,6 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Logout realizado com sucesso!');
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
+            console.log('Logout bem-sucedido. updateUI será acionado.'); // Log de logout
         } catch (error) {
             console.error("Erro ao fazer logout:", error);
             alert(`Erro ao fazer logout: ${error.message}`);
@@ -414,6 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await auth.createUserWithEmailAndPassword(email, password);
             alert('Usuário cadastrado e logado com sucesso!');
             closeAllModals();
+            console.log('Registro bem-sucedido. updateUI será acionado.'); // Log de registro
         } catch (error) {
             console.error("Erro ao cadastrar:", error);
             alert(`Erro ao cadastrar: ${error.message}`);
@@ -427,6 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await auth.signInWithEmailAndPassword(email, password);
             alert('Login realizado com sucesso!');
             closeAllModals();
+            console.log('Login bem-sucedido. updateUI será acionado.'); // Log de login
         } catch (error) {
             console.error("Erro ao fazer login:", error);
             alert(`Erro ao fazer login: ${error.message}`);
