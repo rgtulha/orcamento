@@ -15,13 +15,13 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- REMOVIDA: Seção de busca de produtos -->
-
         <div id="budgetDocument" class="budget-document">
             <div class="header-container">
                 <div class="header-left-col">
                     <!-- Logo no canto esquerdo e grande -->
                     <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
+                    <!-- Palavra Orçamento movida para cá -->
+                    <div class="budget-title-label">Orçamento</div>
                     <div class="client-contact-info">
                         <!-- Estas são as SPANS de exibição, preenchidas via JS -->
                         <p class="client-line">Cliente: <span id="budgetClientNameSpan"></span></p>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="header-right-col">
-                    <div class="budget-title-label">Orçamento</div>
+                    <!-- budget-title-label foi movido para header-left-col -->
                     <div class="budget-date" id="currentDate"></div>
                     <div class="budget-number">nº <span id="budgetNumber"></span></div>
                 </div>
@@ -150,7 +150,7 @@
         </div>
     </div>
 
-    <!-- NOVO: Modal para Adicionar Produto Manualmente -->
+    <!-- Modal para Adicionar Produto Manualmente -->
     <div id="addProductModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
