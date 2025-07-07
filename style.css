@@ -33,79 +33,9 @@ body {
     gap: 15px; /* Reduzindo um pouco o gap entre seções */
 }
 
-/* Search Section Styles */
-.search-section {
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-}
+/* REMOVIDA: Seção de busca de produtos */
+/* .search-section, .search-results, etc. */
 
-.search-section h2 {
-    margin-top: 0;
-    font-size: 1.2em;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.search-section input[type="text"] {
-    width: calc(100% - 100px);
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 0.9em;
-}
-
-.search-section button {
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    vertical-align: top;
-}
-
-.search-section button:hover {
-    background-color: #0056b3;
-}
-
-.search-results {
-    margin-top: 15px;
-    max-height: 200px;
-    overflow-y: auto;
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-    display: block;
-}
-
-.search-result-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px dashed #eee;
-    font-size: 0.9em;
-}
-
-.search-result-item:last-child {
-    border-bottom: none;
-}
-
-.search-result-item button {
-    padding: 5px 10px;
-    font-size: 0.8em;
-    background-color: #28a745;
-}
-
-.search-result-item button:hover {
-    background-color: #218838;
-}
 
 /* Budget Document Styling - Matches Oramento-ex.pdf */
 .budget-document {
@@ -166,7 +96,7 @@ body {
 }
 
 .budget-title-label {
-    font-size: 48pt; /* Aumentado o tamanho da fonte do orçamento */
+    font-size: 48pt; /* Tamanho da fonte do orçamento */
     font-weight: 700; /* Bold */
     color: #333;
     line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
@@ -184,6 +114,19 @@ body {
     font-size: 14pt;
     font-weight: 700;
     color: #333;
+}
+
+/* Main Action Buttons Container */
+.main-action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Para responsividade */
+}
+
+.main-action-buttons .action-button {
+    margin-top: 0; /* Remove a margem superior que era aplicada por .action-button geral */
+    /* Outros estilos de action-button já se aplicam */
 }
 
 
@@ -350,7 +293,7 @@ body {
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.2s ease;
-    margin-top: 10px; /* Espaçamento acima do botão */
+    margin-top: 10px; /* Mantido para botões fora de .main-action-buttons */
 }
 .action-button:hover {
     background-color: #0056b3;
@@ -475,7 +418,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    /* Remover margens e larguras explícitas que conflitem com flex */
 }
 .client-list-controls button {
     flex-shrink: 0; /* Botões não encolhem */
@@ -539,4 +481,21 @@ body {
     justify-content: flex-end;
     gap: 10px;
     margin-top: 15px;
+}
+
+/* NEW: Add Product Modal specific styles */
+.modal-form-fields label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.modal-form-fields input {
+    width: calc(100% - 20px); /* Full width minus padding */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
 }
