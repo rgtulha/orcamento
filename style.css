@@ -48,7 +48,7 @@ body {
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Alinha o topo das colunas */
+    align-items: center; /* NOVO: Centraliza verticalmente as duas colunas */
     margin-bottom: 20px;
 }
 
@@ -65,22 +65,13 @@ body {
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
-    padding-top: 50px; /* Adiciona padding para alinhar verticalmente com client-contact-info */
 }
 
 .company-logo {
-    max-width: 400px; /* Tamanho da logo aumentado */
+    max-width: 500px; /* NOVO: Tamanho da logo aumentado */
     height: auto;
     object-fit: contain;
     margin-bottom: 15px; /* Espaço entre logo e dados do cliente */
-}
-
-.budget-title-label {
-    font-size: 36pt; /* Tamanho da fonte do orçamento diminuído */
-    font-weight: 700; /* Bold */
-    color: #333;
-    line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
-    margin-bottom: 10px; /* Espaçamento entre "Orçamento" e dados do cliente */
 }
 
 .client-contact-info {
@@ -98,11 +89,28 @@ body {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
 }
 
+/* NOVO: Estilo para alinhar Orçamento e Data horizontalmente */
+.budget-title-and-date-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; /* Alinha o texto na linha de base */
+    width: 100%; /* Garante que ocupe a largura total disponível */
+    margin-bottom: 5px; /* Espaço entre esta linha e o número do orçamento */
+}
+
+.budget-title-label {
+    font-size: 28pt; /* NOVO: Tamanho da fonte do orçamento diminuído */
+    font-weight: 700; /* Bold */
+    color: #333;
+    line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
+    /* Removido margin-bottom, pois agora está em um flex container com justify-content: space-between */
+}
+
 .budget-date {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-bottom: 2px;
+    /* Removido margin-bottom, pois agora está em um flex container */
 }
 
 .budget-number {
