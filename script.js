@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Botões de Ação Principal
     const selectClientBtn = document.getElementById('selectClientBtn');
-    const addProductBtn = document.getElementById('addProductBtn'); // NOVO
+    const addProductBtn = document.getElementById('addProductBtn');
 
     // Autenticação
     const accessAuthBtn = document.getElementById('accessAuthBtn');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateClientModalBtn = document.getElementById('updateClientModalBtn');
     const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
 
-    // NOVO: Modal para Adicionar Produto Manualmente
+    // Modal para Adicionar Produto Manualmente
     const addProductModal = document.getElementById('addProductModal');
     const closeAddProductModalBtn = addProductModal.querySelector('.close-button');
     const productDescriptionInput = document.getElementById('productDescriptionInput');
@@ -156,15 +156,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // FUNÇÃO PARA ABRIR QUALQUER MODAL
     const openModal = (modalElement) => {
+        console.log(`Abrindo modal: ${modalElement.id}`); // Log para debug
         modalElement.classList.add('active');
         modalElement.querySelector('input, select, textarea')?.focus();
     };
 
     // FUNÇÃO PARA FECHAR QUALQUER MODAL
     const closeAllModals = () => {
+        console.log('Fechando todos os modais.'); // Log para debug
         authModal.classList.remove('active');
         listClientsModal.classList.remove('active');
-        addProductModal.classList.remove('active'); // Fechar modal de produto também
+        addProductModal.classList.remove('active');
     };
 
     // Lógica de Autenticação
@@ -299,9 +301,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Listeners de Eventos ---
 
-    // REMOVIDA: Listener de evento para o botão "Buscar" de produtos
-    // REMOVIDA: Delegação de evento para os botões "Adicionar" dentro dos resultados da busca de produtos
-
     // Listener para o input de desconto (atualiza totais ao digitar)
     discountInput.addEventListener('input', updateTotals);
 
@@ -309,7 +308,6 @@ document.addEventListener('DOMContentLoaded', () => {
     generatePdfBtn.addEventListener('click', () => {
         // Esconde elementos da UI que não devem aparecer no PDF
         generatePdfBtn.style.display = 'none';
-        // REMOVIDA: searchProductBtn, searchResultsDiv, productSearchInput, searchSectionH2
         discountInput.style.display = 'none';
         selectClientBtn.style.display = 'none';
         addProductBtn.style.display = 'none'; // Esconder o botão de adicionar produto
@@ -349,7 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Mostra novamente os elementos da UI após a conclusão da geração do PDF
             generatePdfBtn.style.display = 'block';
-            // REMOVIDA: searchProductBtn, searchResultsDiv, productSearchInput, searchSectionH2
             discountInput.style.display = 'inline-block';
             if (auth.currentUser) {
                 selectClientBtn.style.display = 'inline-block';
@@ -368,7 +365,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     selectClientBtn.addEventListener('click', () => {
-        if (!auth.currentUser) return alert('Faça login para gerenciar clientes.');
+        if (!auth.currentUser) {
+            alert('Faça login para gerenciar clientes.');
+            return;
+        }
         openModal(listClientsModal);
         clientListArea.style.display = 'block';
         clientAddArea.style.display = 'none';
@@ -401,10 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Logout realizado com sucesso!');
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
-            // Limpar tabela de produtos e recalcular ao deslogar? Ou manter os dados no orçamento?
-            // productsInBudget = []; // Descomente para limpar os produtos ao deslogar
-            // productTableBody.innerHTML = ''; // Descomente para limpar a tabela visualmente
-            // updateTotals(); // Recalcular após limpar
         } catch (error) {
             console.error("Erro ao fazer logout:", error);
             alert(`Erro ao fazer logout: ${error.message}`);
@@ -555,17 +551,19 @@ document.addEventListener('DOMContentLoaded', () => {
         currentClientBeingEdited = null;
     });
 
-    // --- NOVO: Lógica para Adicionar Produto ---
+    // --- Lógica para Adicionar Produto ---
 
-    // Abre o modal de adição de produto
     addProductBtn.addEventListener('click', () => {
-        if (!auth.currentUser) return alert('Faça login para adicionar produtos ao orçamento.');
+        console.log('Botão Adicionar Produto clicado.'); // Log para debug
+        if (!auth.currentUser) {
+            alert('Faça login para adicionar produtos ao orçamento.');
+            return;
+        }
         openModal(addProductModal);
         clearAddProductModalFields();
         productDescriptionInput.focus();
     });
 
-    // Confirma a adição do produto
     confirmAddProductBtn.addEventListener('click', () => {
         const description = productDescriptionInput.value.trim();
         const quantity = parseInt(productQuantityInput.value);
@@ -590,8 +588,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = quantity * unitPrice;
 
         const newProduct = {
-            id: Date.now(), // ID único para cada linha adicionada (importante para futura remoção)
-            budgetNum: nextProductNumber++, // Número sequencial para exibição
+            id: Date.now(),
+            budgetNum: nextProductNumber++,
             description: description,
             quantity: quantity,
             unitPrice: unitPrice,
@@ -601,10 +599,9 @@ document.addEventListener('DOMContentLoaded', () => {
         productsInBudget.push(newProduct);
         addProductToBudgetTable(newProduct);
         updateTotals();
-        closeAllModals(); // Fecha o modal após adicionar
+        closeAllModals();
     });
 
-    // Cancela a adição do produto
     cancelAddProductBtn.addEventListener('click', () => {
         closeAllModals();
         clearAddProductModalFields();
@@ -612,5 +609,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Configuração Inicial ---
     setupInitialBudgetValues();
-    updateTotals(); // Garante que os totais estejam 0,00 no início
+    updateTotals();
 });
