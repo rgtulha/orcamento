@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    // --- Seletores de Elementos do DOM (Mesclados e Renomeados para Clareza) ---
+    // --- Seletores de Elementos do DOM ---
 
-    // --- Budget Generator Elements ---
+    // Budget Generator Elements
     const productSearchInput = document.getElementById('productSearchInput');
     const searchProductBtn = document.getElementById('searchProductBtn');
     const searchResultsDiv = document.getElementById('searchResults');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const budgetClientNameSpan = document.getElementById('budgetClientNameSpan');
     const budgetClientCnpjCpfSpan = document.getElementById('budgetClientCnpjCpfSpan');
 
-    // --- Firebase/Client Management Elements ---
+    // Firebase/Client Management Elements
     const selectClientBtn = document.getElementById('selectClientBtn'); // Botão para abrir modal de clientes
 
     // Autenticação
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (searchTerm) {
                 const normalizedTerm = searchTerm.toLowerCase();
                 query = query.where('normalizedName', '>=', normalizedTerm)
-                             .where('normalizedName', '<=', normalizedTerm + '\uf8ff');
+                             .where('normalizedName', '<=', normalizedTerm + '\\uf8ff');
             }
             const snapshot = await query.get();
             clientsTable.innerHTML = '';
