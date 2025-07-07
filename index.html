@@ -20,6 +20,8 @@
                 <div class="header-left-col">
                     <!-- Logo no canto esquerdo e grande -->
                     <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
+                    <!-- Palavra Orçamento movida para cá, abaixo da logo -->
+                    <div class="budget-title-label">Orçamento</div>
                     <div class="client-contact-info">
                         <!-- Estas são as SPANS de exibição, preenchidas via JS -->
                         <p class="client-line">Cliente: <span id="budgetClientNameSpan"></span></p>
@@ -30,29 +32,30 @@
                     </div>
                 </div>
                 <div class="header-right-col">
-                    <!-- NOVO: Container para alinhar Orçamento e Data -->
-                    <div class="budget-title-and-date-row">
-                        <div class="budget-title-label">Orçamento</div>
-                        <div class="budget-date" id="currentDate"></div>
-                    </div>
+                    <!-- Informações de orçamento à direita -->
                     <div class="budget-number">nº <span id="budgetNumber"></span></div>
+                    <div class="budget-date" id="currentDate"></div>
                 </div>
             </div>
 
             <!-- Botões de Ação Principal -->
             <div class="main-action-buttons">
-                <!-- Botão 'Acessar (Login)' - VISÍVEL quando deslogado -->
-                <button id="accessAuthBtn" class="action-button">Acessar (Login)</button>
-                <!-- Botão 'Sair' - Visibilidade controlada pelo JS (só aparece quando logado) -->
-                <button id="logoutBtn" class="action-button" style="display:none;">Sair</button>
-
-                <!-- Status de Autenticação (mensagem) -->
-                <div id="auth-status">Por favor, faça login.</div>
-
-                <!-- Botões 'Adicionar/Selecionar Cliente' e 'Adicionar Produto' -->
-                <!-- Começam escondidos e são mostrados pelo JS APÓS o login -->
-                <button id="selectClientBtn" class="action-button" style="display: none;">Adicionar/Selecionar Cliente</button>
-                <button id="addProductBtn" class="action-button" style="display: none;">Adicionar Produto</button>
+                <!-- Linha de Controles de Autenticação -->
+                <div class="auth-controls-line">
+                    <!-- Botão 'Acessar (Login)' - VISÍVEL quando deslogado -->
+                    <button id="accessAuthBtn" class="action-button">Acessar (Login)</button>
+                    <!-- Botão 'Sair' - Visibilidade controlada pelo JS (só aparece quando logado) -->
+                    <button id="logoutBtn" class="action-button" style="display:none;">Sair</button>
+                    <!-- Status de Autenticação (mensagem) -->
+                    <div id="auth-status">Por favor, faça login.</div>
+                </div>
+                <!-- Linha de Botões de Ações do Orçamento -->
+                <div class="budget-action-buttons-line">
+                    <!-- Botões 'Adicionar/Selecionar Cliente' e 'Adicionar Produto' -->
+                    <!-- Começam escondidos e são mostrados pelo JS APÓS o login -->
+                    <button id="selectClientBtn" class="action-button" style="display: none;">Adicionar/Selecionar Cliente</button>
+                    <button id="addProductBtn" class="action-button" style="display: none;">Adicionar Produto</button>
+                </div>
             </div>
 
             <table class="product-table">
