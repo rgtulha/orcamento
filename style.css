@@ -33,10 +33,6 @@ body {
     gap: 15px; /* Reduzindo um pouco o gap entre seções */
 }
 
-/* REMOVIDA: Seção de busca de produtos */
-/* .search-section, .search-results, etc. */
-
-
 /* Budget Document Styling - Matches Oramento-ex.pdf */
 .budget-document {
     font-family: 'Montserrat', sans-serif;
@@ -52,7 +48,7 @@ body {
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* Alinha o conteúdo à parte inferior (logo e bloco de orçamento/data) */
+    align-items: flex-start; /* Alinha o topo das colunas */
     margin-bottom: 20px;
 }
 
@@ -60,8 +56,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    flex-basis: 50%; /* Dá uma base de 50% */
-    max-width: 50%; /* Garante que não exceda 50% */
+    flex: 1; /* Ocupa o espaço disponível à esquerda */
 }
 
 .header-right-col {
@@ -69,8 +64,8 @@ body {
     flex-direction: column;
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
-    flex-basis: 50%; /* Dá uma base de 50% */
-    max-width: 50%; /* Garante que não exceda 50% */
+    flex: 1; /* Ocupa o espaço disponível à direita */
+    padding-top: 50px; /* Adiciona padding para alinhar verticalmente com client-contact-info */
 }
 
 .company-logo {
@@ -78,6 +73,14 @@ body {
     height: auto;
     object-fit: contain;
     margin-bottom: 15px; /* Espaço entre logo e dados do cliente */
+}
+
+.budget-title-label {
+    font-size: 36pt; /* Tamanho da fonte do orçamento diminuído */
+    font-weight: 700; /* Bold */
+    color: #333;
+    line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
+    margin-bottom: 10px; /* Espaçamento entre "Orçamento" e dados do cliente */
 }
 
 .client-contact-info {
@@ -93,14 +96,6 @@ body {
 
 .cnpj-line {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
-}
-
-.budget-title-label {
-    font-size: 48pt; /* Tamanho da fonte do orçamento */
-    font-weight: 700; /* Bold */
-    color: #333;
-    line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
-    margin-bottom: 5px; /* Espaçamento entre "Orçamento" e data */
 }
 
 .budget-date {
