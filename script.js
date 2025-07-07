@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         authStatus.style.display = 'none'; // Esconder o status
         console.log('PDF gerando. Botões principais temporariamente ocultos.'); // Log de PDF
 
-        const scale = 3;
+        const scale = 4; // AUMENTADO para melhor qualidade
 
         html2canvas(budgetDocument, {
             scale: scale,
