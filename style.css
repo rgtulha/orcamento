@@ -84,10 +84,14 @@ body {
     margin-bottom: 20px; /* Espaço após informações do cliente */
 }
 
-.client-line, .contact-line {
-    margin: 0;
+/* NOVO: Estilo para os dados do cliente e da empresa dentro de .client-contact-info */
+.client-contact-info p {
+    font-size: 11pt; /* Aumenta o tamanho da fonte */
+    color: #212d42;  /* Nova cor da fonte */
     line-height: 1.6;
+    margin: 0;
 }
+
 
 .cnpj-line {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
@@ -279,12 +283,13 @@ body {
     outline: none;
 }
 
-/* Footer Address */
+/* NOVO: Estilo para o endereço no rodapé */
 .budget-footer-address {
     margin-top: auto;
     text-align: center;
-    font-size: 8pt;
-    color: #666;
+    font-size: 11pt; /* Aumenta a fonte */
+    color: #212d42;  /* Nova cor da fonte */
+    font-weight: bold; /* Coloca em negrito */
     padding-top: 30px;
 }
 
