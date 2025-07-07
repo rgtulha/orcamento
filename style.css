@@ -65,26 +65,22 @@ body {
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
-    padding-top: 20px; /* Ajuste para alinhar com a logo */
 }
 
 .company-logo {
-    max-width: 600px; /* Tamanho da logo aumentado */
+    max-width: 250px; /* Logo no canto esquerdo */
     height: auto;
     object-fit: contain;
+    margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
 }
 
-.budget-title-label {
-    font-size: 28pt;
-    font-weight: 700; /* Bold */
-    color: #333;
-    line-height: 1.1;
-    margin: 15px 0; /* Espaço acima e abaixo da palavra "Orçamento" */
-}
+/* A palavra "Orçamento" não está mais aqui diretamente na coluna esquerda */
+/* .budget-title-label { ... } */
 
 .client-contact-info {
     font-family: 'Montserrat', sans-serif;
     font-weight: 300; /* Light */
+    margin-top: 15px; /* Espaço para alinhar com a linha de data/orçamento */
     margin-bottom: 20px; /* Espaço após informações do cliente */
 }
 
@@ -97,17 +93,33 @@ body {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
 }
 
-.budget-number {
-    font-size: 14pt;
-    font-weight: 700;
+/* NOVO: Estilo para alinhar Orçamento e Data horizontalmente */
+.budget-title-and-date-row {
+    display: flex;
+    justify-content: space-between; /* Espaço entre Orçamento e Data */
+    align-items: baseline; /* Alinha o texto na linha de base */
+    width: 100%; /* Garante que ocupe a largura total disponível */
+    margin-bottom: 5px; /* Espaço entre esta linha e o número do orçamento */
+}
+
+.budget-title-label {
+    font-size: 28pt; /* Tamanho da fonte do orçamento */
+    font-weight: 700; /* Bold */
     color: #333;
+    line-height: 1.1;
 }
 
 .budget-date {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-top: 15px; /* Espaço para alinhar com dados do cliente */
+}
+
+.budget-number {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #333;
+    margin-top: 5px; /* Espaço abaixo da data */
 }
 
 /* Main Action Buttons Container */
