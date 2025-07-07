@@ -65,10 +65,11 @@ body {
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
-    /* NOVO: Ajuste de padding-top para alinhar visualmente com "Cliente:" */
-    /* A altura da logo (max-width: 250px) é estimada em 100px. */
-    /* 100px (logo) + 5px (margin-bottom da logo) + 15px (margin-top do client-contact-info) = 120px */
-    padding-top: 120px;
+    /* NOVO: Ajuste de padding-top para alinhar a data com os dados do cliente */
+    /* Calculado: Altura da logo + margin-bottom da logo + margin-top de .client-contact-info */
+    /* (~90px logo + 5px logo-mb + 20px budget-title-label mt + ~35px budget-title-label height + 15px budget-title-label mb + 15px client-contact-info mt) */
+    /* Total na esquerda antes do "Cliente:" é ~180px */
+    padding-top: 175px; /* Ajuste fino para alinhamento da Data */
 }
 
 .company-logo {
@@ -78,11 +79,21 @@ body {
     margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
 }
 
+/* Estilo para a palavra "Orçamento" (agora na coluna esquerda) */
+.budget-title-label {
+    font-size: 28pt; /* Tamanho da fonte do orçamento */
+    font-weight: 700; /* Bold */
+    color: #333;
+    line-height: 1.1;
+    margin-top: 20px; /* Espaço acima de Orçamento da logo */
+    margin-bottom: 15px; /* Espaço abaixo de Orçamento para o client-contact-info */
+}
+
 .client-contact-info {
     font-family: 'Montserrat', sans-serif;
     font-weight: 300; /* Light */
-    margin-top: 15px; /* Espaço para alinhar com a linha de data/orçamento */
-    margin-bottom: 20px; /* Espaço após informações do cliente */
+    margin-top: 15px; /* Espaço inicial para as informações do cliente */
+    margin-bottom: 20px; /* Espaço após informações do cliente para a tabela */
 }
 
 /* Estilo para os dados do cliente e da empresa dentro de .client-contact-info */
@@ -90,23 +101,20 @@ body {
     font-size: 11pt; /* Aumenta o tamanho da fonte */
     color: #212d42;  /* Nova cor da fonte */
     line-height: 1.6;
-    margin: 0;
+    margin: 0; /* Reset margins para controle mais preciso */
+}
+
+.client-contact-info p.cnpj-line {
+    margin-bottom: 0; /* Removendo margin-bottom daqui para controlar no p.contact-line */
+}
+
+/* NOVO: Espaço acima da primeira linha de contato (e-mail) */
+.client-contact-info p.contact-line:first-of-type {
+    margin-top: 20px; /* Espaço entre CNPJ/CPF e E-mail */
 }
 
 
-.cnpj-line {
-    margin-bottom: 20px; /* NOVO: Espaço adicional abaixo do CNPJ/CPF */
-}
-
-/* Orçamento, Data e Nº O.S. agora são tratados individualmente dentro de .header-right-col */
-.budget-title-label {
-    font-size: 28pt; /* Tamanho da fonte do orçamento */
-    font-weight: 700; /* Bold */
-    color: #333;
-    line-height: 1.1;
-    margin-bottom: 10px; /* Espaço abaixo de Orçamento */
-}
-
+/* Data e Nº O.S. agora são tratados individualmente dentro de .header-right-col */
 .budget-date {
     font-size: 20pt;
     font-weight: 700;
