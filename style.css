@@ -65,7 +65,10 @@ body {
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
-    padding-top: 5px; /* Ajuste para alinhamento vertical com a logo/empresa */
+    /* NOVO: Ajuste de padding-top para alinhar visualmente com "Cliente:" */
+    /* A altura da logo (max-width: 250px) é estimada em 100px. */
+    /* 100px (logo) + 5px (margin-bottom da logo) + 15px (margin-top do client-contact-info) = 120px */
+    padding-top: 120px;
 }
 
 .company-logo {
@@ -92,7 +95,7 @@ body {
 
 
 .cnpj-line {
-    margin-bottom: 10px; /* Espaço adicional após o CNPJ */
+    margin-bottom: 20px; /* NOVO: Espaço adicional abaixo do CNPJ/CPF */
 }
 
 /* Orçamento, Data e Nº O.S. agora são tratados individualmente dentro de .header-right-col */
