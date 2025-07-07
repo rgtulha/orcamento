@@ -41,7 +41,17 @@
 
             <!-- Botões de Ação Principal -->
             <div class="main-action-buttons">
-               <button id="selectClientBtn" class="action-button" style="display: none;">Adicionar/Selecionar Cliente</button>
+                <!-- Botão 'Acessar (Login)' - VISÍVEL quando deslogado -->
+                <button id="accessAuthBtn" class="action-button">Acessar (Login)</button>
+                <!-- Botão 'Sair' - Visibilidade controlada pelo JS (só aparece quando logado) -->
+                <button id="logoutBtn" class="action-button" style="display:none;">Sair</button>
+
+                <!-- Status de Autenticação (mensagem) -->
+                <div id="auth-status">Por favor, faça login.</div>
+
+                <!-- Botões 'Adicionar/Selecionar Cliente' e 'Adicionar Produto' -->
+                <!-- Começam escondidos e são mostrados pelo JS APÓS o login -->
+                <button id="selectClientBtn" class="action-button" style="display: none;">Adicionar/Selecionar Cliente</button>
                 <button id="addProductBtn" class="action-button" style="display: none;">Adicionar Produto</button>
             </div>
 
@@ -94,11 +104,6 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Autenticação</h2>
-            <div id="auth-status">Por favor, faça login para acessar a O.S.</div>
-            <div class="auth-controls">
-                <button id="accessAuthBtn">Acessar</button>
-                <button id="logoutBtn" style="display:none;">Sair</button>
-            </div>
             <div class="auth-form">
                 <input type="email" id="auth-email" placeholder="Email">
                 <input type="password" id="auth-password" placeholder="Senha">
