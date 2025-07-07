@@ -48,7 +48,7 @@ body {
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Centraliza verticalmente as duas colunas */
+    align-items: flex-start; /* Alinha o topo das colunas */
     margin-bottom: 20px;
 }
 
@@ -65,13 +65,21 @@ body {
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
+    padding-top: 20px; /* Ajuste para alinhar com a logo */
 }
 
 .company-logo {
-    max-width: 500px; /* Tamanho da logo aumentado */
+    max-width: 600px; /* Tamanho da logo aumentado */
     height: auto;
     object-fit: contain;
-    margin-bottom: 15px; /* Espaço entre logo e dados do cliente */
+}
+
+.budget-title-label {
+    font-size: 28pt;
+    font-weight: 700; /* Bold */
+    color: #333;
+    line-height: 1.1;
+    margin: 15px 0; /* Espaço acima e abaixo da palavra "Orçamento" */
 }
 
 .client-contact-info {
@@ -89,54 +97,49 @@ body {
     margin-bottom: 10px; /* Espaço adicional após o CNPJ */
 }
 
-/* NOVO: Estilo para alinhar Orçamento e Data horizontalmente */
-.budget-title-and-date-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline; /* Alinha o texto na linha de base */
-    width: 100%; /* Garante que ocupe a largura total disponível */
-    margin-bottom: 5px; /* Espaço entre esta linha e o número do orçamento */
-}
-
-.budget-title-label {
-    font-size: 28pt; /* Tamanho da fonte do orçamento diminuído */
-    font-weight: 700; /* Bold */
-    color: #333;
-    line-height: 1.1; /* Ajusta a altura da linha para melhor visual */
-}
-
-.budget-date {
-    font-size: 20pt;
-    font-weight: 700;
-    color: #333;
-}
-
 .budget-number {
     font-size: 14pt;
     font-weight: 700;
     color: #333;
 }
 
+.budget-date {
+    font-size: 20pt;
+    font-weight: 700;
+    color: #333;
+    margin-top: 15px; /* Espaço para alinhar com dados do cliente */
+}
+
 /* Main Action Buttons Container */
 .main-action-buttons {
     display: flex;
-    gap: 10px;
+    flex-direction: column; /* Botões em coluna */
+    gap: 10px; /* Espaçamento entre as linhas de botões */
     margin-bottom: 20px;
-    flex-wrap: wrap; /* Para responsividade */
-    align-items: center; /* Alinha os itens verticalmente */
 }
 
-.main-action-buttons .action-button {
-    margin-top: 0; /* Remove a margem superior que era aplicada por .action-button geral */
-    /* Outros estilos de action-button já se aplicam */
+.auth-controls-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.main-action-buttons #auth-status {
-    margin-left: auto; /* Empurra para a direita */
+.auth-controls-line #auth-status {
+    margin-left: auto; /* Empurra o status para a direita na linha */
     font-size: 0.9em;
     color: #555;
 }
 
+.budget-action-buttons-line {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.main-action-buttons .action-button {
+    margin-top: 0; /* Garante que a margem superior é controlada pelo gap do flexbox */
+}
 
 /* Product Table */
 .product-table {
@@ -301,7 +304,6 @@ body {
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.2s ease;
-    margin-top: 0; /* Removido margem superior para alinhar melhor no main-action-buttons */
 }
 .action-button:hover {
     background-color: #0056b3;
