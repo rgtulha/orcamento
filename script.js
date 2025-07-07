@@ -183,18 +183,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (user) {
             authStatus.textContent = `Logado como: ${user.email}`;
-            accessAuthBtn.style.display = 'none';
-            logoutBtn.style.display = 'inline-block';
-            selectClientBtn.style.display = 'inline-block';
-            addProductBtn.style.display = 'inline-block';
-            console.log('Botões (selectClientBtn, addProductBtn) definidos para: inline-block'); // Log CRÍTICO
+            accessAuthBtn.style.display = 'none'; // Esconde o botão "Acessar"
+            logoutBtn.style.display = 'inline-block'; // Mostra o botão "Sair"
+            selectClientBtn.style.display = 'inline-block'; // Mostra "Adicionar/Selecionar Cliente"
+            addProductBtn.style.display = 'inline-block'; // Mostra "Adicionar Produto"
+            console.log('Botões de funcionalidade e "Sair" visíveis. "Acessar" oculto.'); // Log CRÍTICO
         } else {
             authStatus.textContent = 'Por favor, faça login para acessar funcionalidades de cliente e orçamento.';
-            accessAuthBtn.style.display = 'inline-block';
-            logoutBtn.style.display = 'none';
-            selectClientBtn.style.display = 'none';
-            addProductBtn.style.display = 'none';
-            console.log('Botões (selectClientBtn, addProductBtn) definidos para: none'); // Log CRÍTICO
+            accessAuthBtn.style.display = 'inline-block'; // Mostra o botão "Acessar"
+            logoutBtn.style.display = 'none'; // Esconde o botão "Sair"
+            selectClientBtn.style.display = 'none'; // Esconde "Adicionar/Selecionar Cliente"
+            addProductBtn.style.display = 'none'; // Esconde "Adicionar Produto"
+            console.log('Botões de funcionalidade e "Sair" ocultos. "Acessar" visível.'); // Log CRÍTICO
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
         }
@@ -324,6 +324,9 @@ document.addEventListener('DOMContentLoaded', () => {
         discountInput.style.display = 'none';
         selectClientBtn.style.display = 'none';
         addProductBtn.style.display = 'none'; // Esconder o botão de adicionar produto
+        accessAuthBtn.style.display = 'none'; // Esconder o botão de acesso
+        logoutBtn.style.display = 'none'; // Esconder o botão de logout
+        authStatus.style.display = 'none'; // Esconder o status
         console.log('PDF gerando. Botões principais temporariamente ocultos.'); // Log de PDF
 
         const scale = 3;
@@ -362,12 +365,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mostra novamente os elementos da UI após a conclusão da geração do PDF
             generatePdfBtn.style.display = 'block';
             discountInput.style.display = 'inline-block';
+            authStatus.style.display = 'block'; // Restaurar a visibilidade do status
             if (auth.currentUser) {
                 selectClientBtn.style.display = 'inline-block';
                 addProductBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'inline-block'; // Restaurar botão de logout
                 console.log('PDF gerado. Botões principais restaurados (se logado).'); // Log de PDF
             } else {
-                 console.log('PDF gerado. Usuário deslogado, botões principais permanecerão ocultos.');
+                accessAuthBtn.style.display = 'inline-block'; // Restaurar botão de acesso
+                console.log('PDF gerado. Usuário deslogado, botões principais permanecerão ocultos exceto "Acessar".');
             }
         });
     });
