@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Configuração e Inicialização do Firebase (Conforme seu script) ---
+    // --- Configuração e Inicialização do Firebase ---
     const firebaseConfig = {
         apiKey: "AIzaSyCmUoU3I9VXjL7YbT95EfUSBnxX3ZzXTII",
         authDomain: "ordemservico-6ddca.firebaseapp.com",
@@ -16,9 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Seletores de Elementos do DOM ---
 
     // Budget Generator Elements
-    const productSearchInput = document.getElementById('productSearchInput');
-    const searchProductBtn = document.getElementById('searchProductBtn');
-    const searchResultsDiv = document.getElementById('searchResults');
     const productTableBody = document.getElementById('productTableBody');
     const subtotalAmountSpan = document.getElementById('subtotalAmount');
     const discountInput = document.getElementById('discountInput');
@@ -32,8 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const budgetClientNameSpan = document.getElementById('budgetClientNameSpan');
     const budgetClientCnpjCpfSpan = document.getElementById('budgetClientCnpjCpfSpan');
 
-    // Firebase/Client Management Elements
-    const selectClientBtn = document.getElementById('selectClientBtn'); // Botão para abrir modal de clientes
+    // Botões de Ação Principal
+    const selectClientBtn = document.getElementById('selectClientBtn');
+    const addProductBtn = document.getElementById('addProductBtn'); // NOVO
 
     // Autenticação
     const accessAuthBtn = document.getElementById('accessAuthBtn');
@@ -50,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const listClientsModal = document.getElementById('listClientsModal');
     const closeListClientsModalBtn = listClientsModal.querySelector('.close-button');
     const clientListSearchInput = document.getElementById('client-list-search');
-    const searchClientListBtn = document.getElementById('searchClientListBtn'); // NOVO: Botão Buscar Clientes na Lista
-    const clientsTable = document.getElementById('clients-table'); // A lista de clientes
+    const searchClientListBtn = document.getElementById('searchClientListBtn');
+    const clientsTable = document.getElementById('clients-table');
     const clientListArea = document.getElementById('client-list-area');
 
     // Área para ADICIONAR NOVO Cliente (dentro do Modal Listar/Gerenciar)
@@ -73,11 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateClientModalBtn = document.getElementById('updateClientModalBtn');
     const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
 
+    // NOVO: Modal para Adicionar Produto Manualmente
+    const addProductModal = document.getElementById('addProductModal');
+    const closeAddProductModalBtn = addProductModal.querySelector('.close-button');
+    const productDescriptionInput = document.getElementById('productDescriptionInput');
+    const productQuantityInput = document.getElementById('productQuantityInput');
+    const productUnitPriceInput = document.getElementById('productUnitPriceInput');
+    const confirmAddProductBtn = document.getElementById('confirmAddProductBtn');
+    const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
+
     // --- Variáveis de Controle ---
     let productsInBudget = [];
-    let nextProductNumber = 1;
-    let listSearchTimeout; // Para o debounce da busca de clientes
-    let currentClientBeingEdited = null; // Para armazenar o normalizedName do cliente sendo editado
+    let nextProductNumber = 1; // Para a coluna 'Nº' da tabela do orçamento
+    let listSearchTimeout;
+    let currentClientBeingEdited = null;
 
     // --- Funções Auxiliares ---
 
@@ -96,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTotals() {
         let subtotal = 0;
         productsInBudget.forEach(product => {
-            subtotal += product.price * product.quantity;
+            subtotal += product.total;
         });
 
         const discountValue = parseFloat(discountInput.value) || 0;
@@ -107,64 +114,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Renderiza os resultados da busca de produtos na div de resultados dedicada.
-     * @param {Array<Object>} results - Um array de objetos de produto para exibir.
+     * Adiciona um produto à tabela do orçamento e atualiza os totais.
+     * @param {Object} productData - Objeto contendo id, description, quantity, unitPrice, total.
      */
-    function renderSearchResults(results) {
-        searchResultsDiv.innerHTML = '';
-        if (results.length === 0) {
-            searchResultsDiv.innerHTML = '<p>Nenhum produto encontrado.</p>';
-            return;
-        }
-
-        results.forEach(product => {
-            const resultItem = document.createElement('div');
-            resultItem.classList.add('search-result-item');
-            resultItem.innerHTML = `
-                <span>${product.description}</span> - <span class="price">R$ ${formatCurrency(product.price)}</span>
-                <button class="add-to-budget-btn" data-product-id="${product.id}" data-price="${product.price}" data-description="${product.description}">Adicionar</button>
-            `;
-            searchResultsDiv.appendChild(resultItem);
-        });
+    function addProductToBudgetTable(productData) {
+        const row = productTableBody.insertRow();
+        row.dataset.productId = productData.id; // Garante um ID único para a linha
+        row.innerHTML = `
+            <td class="col-num">${productData.budgetNum}</td>
+            <td class="col-description">${productData.description}</td>
+            <td class="col-price">R$ ${formatCurrency(productData.unitPrice)}</td>
+            <td class="col-quantity">${productData.quantity}</td>
+            <td class="col-total product-total">R$ ${formatCurrency(productData.total)}</td>
+        `;
+        // Poderia adicionar um botão de remover item aqui se necessário
     }
 
     /**
-     * Adiciona ou atualiza um produto na tabela do orçamento.
-     * @param {Object} productData - O objeto do produto a ser adicionado/atualizado.
+     * Limpa os campos do modal de adição de produto.
      */
-    function addProductToBudget(productData) {
-        const existingProduct = productsInBudget.find(p => p.id === productData.id);
-
-        if (existingProduct) {
-            existingProduct.quantity += 1;
-            existingProduct.total = existingProduct.quantity * existingProduct.price;
-            const row = document.querySelector(`tr[data-product-id="${productData.id}"]`);
-            if (row) {
-                row.querySelector('.product-quantity').textContent = existingProduct.quantity;
-                row.querySelector('.product-total').textContent = formatCurrency(existingProduct.total);
-            }
-        } else {
-            const newProduct = {
-                id: productData.id,
-                description: productData.description,
-                price: productData.price,
-                quantity: 1,
-                total: productData.price,
-                budgetNum: nextProductNumber++
-            };
-            productsInBudget.push(newProduct);
-
-            const row = productTableBody.insertRow();
-            row.dataset.productId = newProduct.id;
-            row.innerHTML = `
-                <td class="col-num">${newProduct.budgetNum}</td>
-                <td class="col-description">${newProduct.description}</td>
-                <td class="col-price">R$ ${formatCurrency(newProduct.price)}</td>
-                <td class="col-quantity">${newProduct.quantity}</td>
-                <td class="col-total product-total">R$ ${formatCurrency(newProduct.total)}</td>
-            `;
-        }
-        updateTotals();
+    function clearAddProductModalFields() {
+        productDescriptionInput.value = '';
+        productQuantityInput.value = '1';
+        productUnitPriceInput.value = '0.00';
     }
 
     /**
@@ -180,66 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
         budgetNumberSpan.textContent = String(Math.floor(Math.random() * 900) + 100);
     }
 
-    // --- Mock Product Data (Simulação de Retorno da Busca de Fornecedores) ---
-    const mockProducts = [
-        {
-            id: 'proc-intel-i9',
-            description: "PROCESSADOR INTEL CORE I9-14900 (TURBO ATE 5.8GHZ) 36MB LGA1700 14° GEN",
-            price: 4816.34,
-        },
-        {
-            id: 'placa-mae-gigabyte',
-            description: "PLACA MAE (INTEL) GIGABYTE H610M K DDR4 2.0 LGA1700 12° 13° E 14° GEN",
-            price: 639.21,
-        },
-        {
-            id: 'memoria-patriot-16gb',
-            description: "MEMORIA PATRIOT 16GB DDR4 3200MHZ 1.2 SIGNATURE - DESKTOP - PSD416G32002",
-            price: 252.75,
-        },
-        {
-            id: 'placa-video-rtx5060',
-            description: "PLACA DE VIDEO MSI GEFORCE RTX 5060 VENTUS 2X OC 8GB GDDR7 128BITS",
-            price: 2585.50,
-        },
-        {
-            id: 'ssd-adata-512gb',
-            description: "SSD ADATA LEGEND 710 512GB M.2 2280 NVME PCIE 3.0 - ALEG-710-512GCS",
-            price: 332.90,
-        },
-        {
-            id: 'fonte-acer-650w',
-            description: "FONTE DE ALIMENTACAO ACER 650W AC650 80+BRONZE",
-            price: 486.66,
-        },
-        {
-            id: 'water-cooler-deepcool',
-            description: "WATER COOLER DEEPCOOL GAMMAXX ANTILEAK LE500 C/6-COLORLED-R-LE500- KLNMCG-1",
-            price: 374.31,
-        },
-        {
-            id: 'kit-cooler-c3tech',
-            description: "KIT COOLER C3TECH RGB F9-L650WHRGB COM CONTROLADORA",
-            price: 199.28,
-        },
-        {
-            id: 'gabinete-gamer-c3tech',
-            description: "GABINETE GAMER C3TECH MT-G100BK SEM FONTE PRETO",
-            price: 203.35,
-        },
-        {
-            id: 'windows-11-pro',
-            description: "WINDOWS 11 PRO ESD – DIGITAL DOWNLOAD transferivel para qualquer máquina",
-            price: 1352.00,
-        }
-    ];
-
     // --- Funções do Firebase ---
 
     // FUNÇÃO PARA ABRIR QUALQUER MODAL
     const openModal = (modalElement) => {
         modalElement.classList.add('active');
-        // Opcional: focar no primeiro input do modal (se houver)
         modalElement.querySelector('input, select, textarea')?.focus();
     };
 
@@ -247,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeAllModals = () => {
         authModal.classList.remove('active');
         listClientsModal.classList.remove('active');
+        addProductModal.classList.remove('active'); // Fechar modal de produto também
     };
 
     // Lógica de Autenticação
@@ -255,13 +173,14 @@ document.addEventListener('DOMContentLoaded', () => {
             authStatus.textContent = `Logado como: ${user.email}`;
             accessAuthBtn.style.display = 'none';
             logoutBtn.style.display = 'inline-block';
-            selectClientBtn.style.display = 'inline-block'; // Mostra botão de selecionar cliente
+            selectClientBtn.style.display = 'inline-block';
+            addProductBtn.style.display = 'inline-block'; // Mostrar botão de adicionar produto
         } else {
-            authStatus.textContent = 'Por favor, faça login para acessar funcionalidades de cliente.';
+            authStatus.textContent = 'Por favor, faça login para acessar funcionalidades de cliente e orçamento.';
             accessAuthBtn.style.display = 'inline-block';
             logoutBtn.style.display = 'none';
-            selectClientBtn.style.display = 'none'; // Esconde botão de selecionar cliente
-            // Limpar dados do cliente no orçamento se deslogar
+            selectClientBtn.style.display = 'none';
+            addProductBtn.style.display = 'none'; // Esconder botão de adicionar produto
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
         }
@@ -275,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         budgetClientCnpjCpfSpan.textContent = clientData.cnpj || '';
     };
 
-    // Lógica para carregar lista de clientes (adaptada)
+    // Lógica para carregar lista de clientes
     const loadClientsList = async (searchTerm = '') => {
         if (!auth.currentUser) {
             clientsTable.innerHTML = '<li class="no-data">Faça login para ver os clientes.</li>';
@@ -288,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (searchTerm) {
                 const normalizedTerm = searchTerm.toLowerCase();
                 query = query.where('normalizedName', '>=', normalizedTerm)
-                             .where('normalizedName', '<=', normalizedTerm + '\\uf8ff');
+                             .where('normalizedName', '<=', normalizedTerm + '\uf8ff');
             }
             const snapshot = await query.get();
             clientsTable.innerHTML = '';
@@ -302,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const client = doc.data();
                 const li = document.createElement('li');
                 li.className = 'clients-table-row';
-                // Armazena todos os dados no dataset para fácil acesso
                 li.dataset.id = doc.id;
                 li.dataset.nome = client.nome;
                 li.dataset.cnpj = client.cnpj || '';
@@ -319,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 clientsTable.appendChild(li);
             });
 
-            // Adiciona os event listeners após a criação dos elementos
             addEventListenersToClientList();
 
         } catch (error) {
@@ -328,33 +245,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Adiciona event listeners aos botões da lista de clientes
     const addEventListenersToClientList = () => {
         clientsTable.querySelectorAll('.clients-table-row').forEach(row => {
             const clientId = row.dataset.id;
 
-            // AÇÃO DE SELECIONAR
             row.querySelector('.select-btn').addEventListener('click', () => {
                 selectClientAndFillBudget(row.dataset);
             });
-            // AÇÃO DE EDITAR
             row.querySelector('.edit-btn').addEventListener('click', () => {
                 editClient(clientId, row.dataset);
             });
-            // AÇÃO DE EXCLUIR
             row.querySelector('.delete-btn').addEventListener('click', () => {
                 deleteClient(clientId);
             });
         });
     };
 
-    // Função para selecionar cliente e preencher formulário principal do ORÇAMENTO
     const selectClientAndFillBudget = (clientData) => {
         populateBudgetClientFields(clientData);
-        closeAllModals(); // Fecha o modal após a seleção
+        closeAllModals();
     };
 
-    // Lógica para edição de cliente
     const editClient = (clientId, clientData) => {
         currentClientBeingEdited = clientId;
         editModalClienteNome.value = clientData.nome;
@@ -368,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
         editModalClienteNome.focus();
     };
 
-    // Lógica para exclusão de cliente
     const deleteClient = async (clientId) => {
         if (!auth.currentUser) {
             alert('Faça login para excluir clientes.');
@@ -389,31 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Listeners de Eventos ---
 
-    // Listener de evento para o botão "Buscar" de produtos
-    searchProductBtn.addEventListener('click', () => {
-        const searchTerm = productSearchInput.value.toLowerCase().trim();
-        if (searchTerm === '') {
-            renderSearchResults([]);
-            return;
-        }
-        const filteredProducts = mockProducts.filter(p => p.description.toLowerCase().includes(searchTerm));
-        renderSearchResults(filteredProducts);
-    });
-
-    // Delegação de evento para os botões "Adicionar" dentro dos resultados da busca de produtos
-    searchResultsDiv.addEventListener('click', (event) => {
-        const addButton = event.target.closest('.add-to-budget-btn');
-        if (addButton) {
-            const productId = addButton.dataset.productId;
-            const productDescription = addButton.dataset.description;
-            const productPrice = parseFloat(addButton.dataset.price);
-
-            addProductToBudget({ id: productId, description: productDescription, price: productPrice });
-
-            searchResultsDiv.innerHTML = '';
-            productSearchInput.value = '';
-        }
-    });
+    // REMOVIDA: Listener de evento para o botão "Buscar" de produtos
+    // REMOVIDA: Delegação de evento para os botões "Adicionar" dentro dos resultados da busca de produtos
 
     // Listener para o input de desconto (atualiza totais ao digitar)
     discountInput.addEventListener('input', updateTotals);
@@ -422,15 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
     generatePdfBtn.addEventListener('click', () => {
         // Esconde elementos da UI que não devem aparecer no PDF
         generatePdfBtn.style.display = 'none';
-        searchProductBtn.style.display = 'none';
-        searchResultsDiv.style.display = 'none';
-        productSearchInput.style.display = 'none';
-        const searchSectionH2 = productSearchInput.parentElement.querySelector('h2');
-        if (searchSectionH2) {
-            searchSectionH2.style.display = 'none';
-        }
-        discountInput.style.display = 'none'; // Esconde o input de desconto
-        selectClientBtn.style.display = 'none'; // Esconde o botão de selecionar cliente
+        // REMOVIDA: searchProductBtn, searchResultsDiv, productSearchInput, searchSectionH2
+        discountInput.style.display = 'none';
+        selectClientBtn.style.display = 'none';
+        addProductBtn.style.display = 'none'; // Esconder o botão de adicionar produto
 
         const scale = 3;
 
@@ -467,15 +349,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Mostra novamente os elementos da UI após a conclusão da geração do PDF
             generatePdfBtn.style.display = 'block';
-            searchProductBtn.style.display = 'block';
-            searchResultsDiv.style.display = 'block';
-            productSearchInput.style.display = 'block';
-            if (searchSectionH2) {
-                searchSectionH2.style.display = 'block';
-            }
+            // REMOVIDA: searchProductBtn, searchResultsDiv, productSearchInput, searchSectionH2
             discountInput.style.display = 'inline-block';
-            if (auth.currentUser) { // Mostra o botão de selecionar cliente apenas se logado
+            if (auth.currentUser) {
                 selectClientBtn.style.display = 'inline-block';
+                addProductBtn.style.display = 'inline-block'; // Mostrar o botão de adicionar produto
             }
         });
     });
@@ -499,13 +377,13 @@ document.addEventListener('DOMContentLoaded', () => {
         loadClientsList();
     });
 
-    // Event Listeners para fechar modais
-    [closeAuthModalBtn, closeListClientsModalBtn].forEach(btn => {
+    // Event Listeners para fechar modais (geral)
+    [closeAuthModalBtn, closeListClientsModalBtn, closeAddProductModalBtn].forEach(btn => {
         btn.addEventListener('click', closeAllModals);
     });
 
     window.addEventListener('click', (event) => {
-        if (event.target === authModal || event.target === listClientsModal) {
+        if (event.target === authModal || event.target === listClientsModal || event.target === addProductModal) {
             closeAllModals();
         }
     });
@@ -521,9 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             await auth.signOut();
             alert('Logout realizado com sucesso!');
-            // Limpa dados do cliente no orçamento
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
+            // Limpar tabela de produtos e recalcular ao deslogar? Ou manter os dados no orçamento?
+            // productsInBudget = []; // Descomente para limpar os produtos ao deslogar
+            // productTableBody.innerHTML = ''; // Descomente para limpar a tabela visualmente
+            // updateTotals(); // Recalcular após limpar
         } catch (error) {
             console.error("Erro ao fazer logout:", error);
             alert(`Erro ao fazer logout: ${error.message}`);
@@ -559,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lógica do botão Buscar Clientes na Lista
     searchClientListBtn.addEventListener('click', () => {
         const searchTerm = clientListSearchInput.value.trim();
-        loadClientsList(searchTerm); // Força a busca imediatamente
+        loadClientsList(searchTerm);
     });
 
     // Busca de Cliente no Modal (em tempo real com debounce)
@@ -674,7 +555,62 @@ document.addEventListener('DOMContentLoaded', () => {
         currentClientBeingEdited = null;
     });
 
+    // --- NOVO: Lógica para Adicionar Produto ---
+
+    // Abre o modal de adição de produto
+    addProductBtn.addEventListener('click', () => {
+        if (!auth.currentUser) return alert('Faça login para adicionar produtos ao orçamento.');
+        openModal(addProductModal);
+        clearAddProductModalFields();
+        productDescriptionInput.focus();
+    });
+
+    // Confirma a adição do produto
+    confirmAddProductBtn.addEventListener('click', () => {
+        const description = productDescriptionInput.value.trim();
+        const quantity = parseInt(productQuantityInput.value);
+        const unitPrice = parseFloat(productUnitPriceInput.value);
+
+        if (!description) {
+            alert('A descrição do produto é obrigatória.');
+            productDescriptionInput.focus();
+            return;
+        }
+        if (isNaN(quantity) || quantity <= 0) {
+            alert('A quantidade deve ser um número inteiro positivo.');
+            productQuantityInput.focus();
+            return;
+        }
+        if (isNaN(unitPrice) || unitPrice < 0) {
+            alert('O valor unitário deve ser um número não negativo.');
+            productUnitPriceInput.focus();
+            return;
+        }
+
+        const total = quantity * unitPrice;
+
+        const newProduct = {
+            id: Date.now(), // ID único para cada linha adicionada (importante para futura remoção)
+            budgetNum: nextProductNumber++, // Número sequencial para exibição
+            description: description,
+            quantity: quantity,
+            unitPrice: unitPrice,
+            total: total
+        };
+
+        productsInBudget.push(newProduct);
+        addProductToBudgetTable(newProduct);
+        updateTotals();
+        closeAllModals(); // Fecha o modal após adicionar
+    });
+
+    // Cancela a adição do produto
+    cancelAddProductBtn.addEventListener('click', () => {
+        closeAllModals();
+        clearAddProductModalFields();
+    });
+
     // --- Configuração Inicial ---
     setupInitialBudgetValues();
-    updateTotals();
+    updateTotals(); // Garante que os totais estejam 0,00 no início
 });
