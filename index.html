@@ -88,8 +88,8 @@
                         <div class="summary-box discount-box">
                             <span>Desconto</span>
                             <div class="discount-input-container">
-                                   R\$ <span id="discountAmountDisplay" style="display: none;"></span> <!-- NOVO: Span para exibir o valor no PDF -->
-                                    <input type="number" id="discountInput" value="0.00" step="0.01">    
+                                R\$ <span id="discountAmountDisplay" class="print-only-display"></span> <!-- NOVO: Span para exibir o valor no PDF -->
+                                <input type="number" id="discountInput" value="0.00" step="0.01">
                             </div>
                         </div>
                         <div class="summary-box grand-total-box">
@@ -104,7 +104,7 @@
                 <p>Av. Portugal, n° 1148, Sala C2501, Cond. Orion Business - CNPJ: 45.258.581/0001-02</p>
             </div>
         </div>
-        <button id="generatePdfBtn">Gerar PDF</button>
+        <button id="generatePdfBtn">Imprimir</button> <!-- MODIFICADO: Texto do botão -->
     </div>
 
     <!-- Modais de Autenticação e Gerenciamento de Clientes -->
