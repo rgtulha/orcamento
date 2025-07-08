@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const productTableBody = document.getElementById('productTableBody');
     const subtotalAmountSpan = document.getElementById('subtotalAmount');
     const discountInput = document.getElementById('discountInput');
+    const discountAmountDisplay = document.getElementById('discountAmountDisplay'); // NOVO: Elemento para exibir o desconto
     const grandTotalSpan = document.getElementById('grandTotal');
     const generatePdfBtn = document.getElementById('generatePdfBtn');
-    // const budgetDocument = document.getElementById('budgetDocument'); // REMOVIDO: Antigo alvo do html2canvas
-    const appContainer = document.querySelector('.app-container'); // NOVO: Alvo do html2canvas agora é o container geral
+    const appContainer = document.querySelector('.app-container');
     const currentDateSpan = document.getElementById('currentDate');
     const budgetNumberSpan = document.getElementById('budgetNumber');
 
@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const finalTotal = subtotal - discountValue;
 
         subtotalAmountSpan.textContent = formatCurrency(subtotal);
+        discountAmountDisplay.textContent = formatCurrency(discountValue); // NOVO: Atualiza o span do desconto
         grandTotalSpan.textContent = formatCurrency(finalTotal);
     }
 
@@ -322,21 +323,24 @@ document.addEventListener('DOMContentLoaded', () => {
     generatePdfBtn.addEventListener('click', () => {
         // Esconde elementos da UI que não devem aparecer no PDF
         generatePdfBtn.style.display = 'none';
-        discountInput.style.display = 'none';
         selectClientBtn.style.display = 'none';
         addProductBtn.style.display = 'none'; // Esconder o botão de adicionar produto
         accessAuthBtn.style.display = 'none'; // Esconder o botão de acesso
         logoutBtn.style.display = 'none'; // Esconder o botão de logout
         authStatus.style.display = 'none'; // Esconder o status
+
+        // NOVO: Oculta o input e mostra o span do desconto para a impressão
+        discountInput.style.display = 'none';
+        discountAmountDisplay.style.display = 'inline'; // Ajuste conforme necessário (inline-block, block)
+
         console.log('PDF gerando. Botões principais temporariamente ocultos.'); // Log de PDF
 
         const scale = 4; // AUMENTADO para melhor qualidade
 
-        html2canvas(appContainer, { // MODIFICADO: Agora captura o '.app-container' para incluir as margens
+        html2canvas(appContainer, {
             scale: scale,
             useCORS: true,
             logging: false,
-            // windowWidth e windowHeight removidos para que html2canvas use as dimensões do alvo
         }).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
 
@@ -364,8 +368,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Mostra novamente os elementos da UI após a conclusão da geração do PDF
             generatePdfBtn.style.display = 'block';
-            discountInput.style.display = 'inline-block';
             authStatus.style.display = 'block'; // Restaurar a visibilidade do status
+
+            // NOVO: Restaura o input e oculta o span do desconto
+            discountInput.style.display = 'inline-block';
+            discountAmountDisplay.style.display = 'none';
+
             if (auth.currentUser) {
                 selectClientBtn.style.display = 'inline-block';
                 addProductBtn.style.display = 'inline-block';
