@@ -10,7 +10,7 @@
 body {
     font-family: 'Montserrat', sans-serif; /* Usando Montserrat como alternativa */
     margin: 0;
-    padding: 20px;
+    padding: 0; /* MODIFICADO: Removido o padding do body */
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
@@ -27,7 +27,7 @@ body {
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     padding: 20mm; /* Simulates A4 margins */
-    box-sizing: border-box;
+    box-sizing: border-box; /* Garante que o padding é incluído na largura total */
     display: flex;
     flex-direction: column;
     gap: 15px; /* Reduzindo um pouco o gap entre seções */
@@ -117,7 +117,7 @@ body {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-bottom: 70px; /* MODIFICADO: AUMENTADO o espaço abaixo da Data para descer o Nº O.S. */
+    margin-bottom: 80px; /* MODIFICADO: AUMENTADO ainda mais o espaço abaixo da Data para descer o Nº O.S. */
 }
 
 .budget-number {
