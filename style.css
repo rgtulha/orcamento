@@ -10,7 +10,7 @@
 body {
     font-family: 'Montserrat', sans-serif; /* Usando Montserrat como alternativa */
     margin: 0;
-    padding: 0; /* MODIFICADO: Removido o padding do body */
+    padding: 0; /* Removido o padding do body para controle total pelo app-container */
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
@@ -26,11 +26,11 @@ body {
     max-width: 210mm;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    padding: 20mm; /* Simulates A4 margins */
+    padding: 20mm; /* Simula as margens A4 */
     box-sizing: border-box; /* Garante que o padding é incluído na largura total */
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Reduzindo um pouco o gap entre seções */
+    gap: 15px; /* Espaçamento entre as seções principais */
 }
 
 /* Budget Document Styling - Matches Oramento-ex.pdf */
@@ -65,25 +65,24 @@ body {
     align-items: flex-end; /* Alinha o conteúdo à direita */
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
-    /* NOVO: Ajuste de padding-top para alinhar a data com os dados do cliente */
-    /* Este valor foi calculado para que o topo da Data (coluna direita) se alinha com o topo da linha 'Cliente:' (coluna esquerda) */
+    /* Ajuste de padding-top para alinhar a data com os dados do cliente */
     padding-top: 195px; 
 }
 
 .company-logo {
-    max-width: 350px; /* MODIFICADO: Aumenta o tamanho máximo da logo */
+    max-width: 350px; /* Aumenta o tamanho máximo da logo */
     height: auto;
     object-fit: contain;
     margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
 }
 
-/* Estilo para a palavra "Orçamento" (agora na coluna esquerda) */
+/* Estilo para a palavra "Orçamento" */
 .budget-title-label {
     font-size: 28pt; /* Tamanho da fonte do orçamento */
     font-weight: 700; /* Bold */
     color: #333;
     line-height: 1.1;
-    margin-top: 10px; /* MODIFICADO: Reduzido para aproximar da logo */
+    margin-top: 10px; /* Reduzido para aproximar da logo */
     margin-bottom: 15px; /* Espaço abaixo de Orçamento para o client-contact-info */
 }
 
@@ -108,23 +107,21 @@ body {
 
 /* Espaço acima da primeira linha de contato (e-mail) */
 .client-contact-info p.contact-line:first-of-type {
-    margin-top: 60px; /* MODIFICADO: AUMENTADO o espaço entre CNPJ/CPF e E-mail */
+    margin-top: 60px; /* Aumentado o espaço entre CNPJ/CPF e E-mail */
 }
 
-
-/* Data e Nº O.S. agora são tratados individualmente dentro de .header-right-col */
+/* Data e Nº O.S. */
 .budget-date {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-bottom: 80px; /* MODIFICADO: AUMENTADO ainda mais o espaço abaixo da Data para descer o Nº O.S. */
+    margin-bottom: 80px; /* Aumentado o espaço abaixo da Data para descer o Nº O.S. */
 }
 
 .budget-number {
     font-size: 14pt;
     font-weight: 700;
     color: #333;
-    /* margin-top removido, espaçamento feito pelo margin-bottom dos elementos acima */
 }
 
 /* Main Action Buttons Container */
@@ -220,12 +217,12 @@ body {
 
 .total-boxes-container {
     display: flex;
-    flex-direction: column; /* MODIFICADO: Para empilhar o Subtotal e o grupo Desconto/Total */
+    flex-direction: column; /* Para empilhar o Subtotal e o grupo Desconto/Total */
     justify-content: flex-end; /* Mantém o alinhamento à direita dentro do summary-section */
     gap: 10px; /* Espaço entre a caixa Subtotal e o grupo Desconto/Total */
 }
 
-/* NOVO: Estilo para o contêiner de Desconto e Total */
+/* Estilo para o contêiner de Desconto e Total */
 .discount-and-grand-total {
     display: flex; /* Para manter Desconto e Total lado a lado */
     gap: 10px; /* Espaço entre as caixas Desconto e Total */
@@ -290,7 +287,7 @@ body {
     outline: none;
 }
 
-/* NOVO: Classe para elementos que só aparecem na impressão */
+/* Classe para elementos que só aparecem na impressão */
 .print-only-display {
     display: none; /* Escondido por padrão na tela */
 }
@@ -305,7 +302,7 @@ body {
     padding-top: 30px;
 }
 
-/* Generate PDF Button */
+/* Generate PDF Button (agora "Imprimir") */
 #generatePdfBtn {
     margin-top: 20px;
     padding: 10px 20px;
@@ -461,7 +458,6 @@ body {
     box-sizing: border-box;
 }
 
-
 .client-list {
     list-style: none;
     padding: 0;
@@ -533,6 +529,37 @@ body {
     border-radius: 4px;
     font-size: 1em;
 }
+
+/* Adições para o Modal de Adicionar Produto (Calculo de Preço) */
+.modal-form-fields .profit-options {
+    margin-bottom: 15px;
+}
+
+.modal-form-fields .profit-options label {
+    display: inline-block; /* Para alinhar labels com radio buttons */
+    margin-right: 10px;
+    font-weight: normal; /* Labels de rádio não precisam ser negrito */
+}
+
+.modal-form-fields .profit-options input[type="radio"] {
+    width: auto; /* Radio buttons devem ter largura automática */
+    margin-right: 5px;
+    margin-bottom: 0; /* Remover margin-bottom extra */
+}
+
+.calculated-price-display {
+    display: block; /* Ocupa a linha inteira */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #e9ecef; /* Um fundo cinza para indicar que é só exibição */
+    color: #495057;
+    text-align: right; /* Alinha o valor à direita */
+    margin-bottom: 15px;
+}
+
 
 /* --- ESTILOS PARA MODO DE IMPRESSÃO --- */
 /* Adiciona esta classe ao <body> para controlar a visibilidade dos elementos */
