@@ -80,12 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateClientModalBtn = document.getElementById('updateClientModalBtn');
     const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
 
-    // Modal para Adicionar Produto Manualmente
+    // Modal para Adicionar Produto Manualmente - NOVOS SELECTORES
     const addProductModal = document.getElementById('addProductModal');
     const closeAddProductModalBtn = addProductModal.querySelector('.close-button');
     const productDescriptionInput = document.getElementById('productDescriptionInput');
     const productQuantityInput = document.getElementById('productQuantityInput');
-    const productUnitPriceInput = document.getElementById('productUnitPriceInput');
+    const productBasePriceInput = document.getElementById('productBasePriceInput'); // NOVO: Valor de Custo
+    const profit10Radio = document.getElementById('profit10'); // NOVO: Opção de Lucro 10%
+    const profit5Radio = document.getElementById('profit5'); // NOVO: Opção de Lucro 5%
+    const productFinalPriceDisplay = document.getElementById('productFinalPriceDisplay'); // NOVO: Span para exibir o valor final calculado
     const confirmAddProductBtn = document.getElementById('confirmAddProductBtn');
     const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
 
@@ -144,20 +147,22 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `
             <td class="col-num">${productData.budgetNum}</td>
             <td class="col-description">${productData.description}</td>
-            <td class="col-price">R$${formatCurrency(productData.unitPrice)}</td> <!-- MODIFICADO -->
+            <td class="col-price">R\$${formatCurrency(productData.unitPrice)}</td>
             <td class="col-quantity">${productData.quantity}</td>
-            <td class="col-total product-total">R$${formatCurrency(productData.total)}</td> <!-- MODIFICADO -->
+            <td class="col-total product-total">R\$${formatCurrency(productData.total)}</td>
         `;
         // Poderia adicionar um botão de remover item aqui se necessário
     }
 
     /**
-     * Limpa os campos do modal de adição de produto.
+     * Limpa os campos do modal de adição de produto e reseta os valores iniciais.
      */
     function clearAddProductModalFields() {
         productDescriptionInput.value = '';
         productQuantityInput.value = '1';
-        productUnitPriceInput.value = '0.00';
+        productBasePriceInput.value = '0.00'; // Reseta o valor de custo
+        profit10Radio.checked = true; // Define 10% de lucro como padrão
+        calculateAndDisplayFinalPrice(); // Calcula e exibe o valor inicial (0.00)
     }
 
     /**
@@ -173,13 +178,43 @@ document.addEventListener('DOMContentLoaded', () => {
         budgetNumberSpan.textContent = String(Math.floor(Math.random() * 900) + 100);
     }
 
+    // --- Funções de Cálculo de Preço (NOVO) ---
+    const TAX_PERCENTAGE = 0.06; // 6% de imposto
+
+    /**
+     * Calcula o preço final unitário com base no custo, lucro e imposto.
+     */
+    function calculateAndDisplayFinalPrice() {
+        const basePrice = parseFloat(productBasePriceInput.value.replace(',', '.')) || 0;
+        const selectedProfitPercentage = parseFloat(document.querySelector('input[name="profitOption"]:checked').value);
+
+        if (isNaN(basePrice) || basePrice < 0) {
+            productFinalPriceDisplay.textContent = formatCurrency(0);
+            return;
+        }
+
+        // Calcula o preço com lucro
+        const priceWithProfit = basePrice * (1 + selectedProfitPercentage);
+        // Calcula o preço final aplicando o imposto sobre o preço com lucro
+        const finalPrice = priceWithProfit * (1 + TAX_PERCENTAGE);
+        
+        productFinalPriceDisplay.textContent = formatCurrency(finalPrice);
+    }
+
+
     // --- Funções do Firebase ---
 
     // FUNÇÃO PARA ABRIR QUALQUER MODAL
     const openModal = (modalElement) => {
         console.log(`Abrindo modal: ${modalElement.id}`);
         modalElement.classList.add('active');
-        modalElement.querySelector('input, select, textarea')?.focus();
+        // Para o modal de produto, garanta que o cálculo inicial seja feito
+        if (modalElement.id === 'addProductModal') {
+            clearAddProductModalFields(); // Limpa e define valores iniciais
+            productDescriptionInput.focus();
+        } else {
+            modalElement.querySelector('input, select, textarea')?.focus();
+        }
     };
 
     // FUNÇÃO PARA FECHAR QUALQUER MODAL
@@ -581,16 +616,19 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Faça login para adicionar produtos ao orçamento.');
             return;
         }
-        openModal(addProductModal);
-        clearAddProductModalFields();
-        productDescriptionInput.focus();
+        openModal(addProductModal); // openModal já chama clearAddProductModalFields() e foca
     });
+
+    // NOVO: Adiciona listeners para o cálculo em tempo real no modal
+    productBasePriceInput.addEventListener('input', calculateAndDisplayFinalPrice);
+    profit10Radio.addEventListener('change', calculateAndDisplayFinalPrice);
+    profit5Radio.addEventListener('change', calculateAndDisplayFinalPrice);
 
     confirmAddProductBtn.addEventListener('click', () => {
         const description = productDescriptionInput.value.trim();
-        // Garante que quantity é um número inteiro e unitPrice é um float, substituindo ',' por '.'
         const quantity = parseInt(productQuantityInput.value);
-        const unitPrice = parseFloat(productUnitPriceInput.value.replace(',', '.'));
+        // O unitPrice agora é o valor calculado no display
+        const unitPrice = parseFloat(productFinalPriceDisplay.textContent.replace(',', '.'));
 
         console.log(`Adding product - Desc: ${description}, Qty: ${quantity}, UnitPrice: ${unitPrice}`);
         console.log(`Typeof Qty: ${typeof quantity}, Typeof UnitPrice: ${typeof unitPrice}`);
@@ -607,9 +645,9 @@ document.addEventListener('DOMContentLoaded', () => {
             productQuantityInput.focus();
             return;
         }
-        if (isNaN(unitPrice) || unitPrice < 0) {
-            alert('O valor unitário deve ser um número não negativo.');
-            productUnitPriceInput.focus();
+        if (isNaN(unitPrice) || unitPrice <= 0) { // Alterado para <= 0, já que não pode ser 0 ou negativo
+            alert('O valor final unitário deve ser um número positivo.');
+            // Não foca em input, já que é um display, mas pode dar um alerta.
             return;
         }
 
@@ -632,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelAddProductBtn.addEventListener('click', () => {
         closeAllModals();
-        clearAddProductModalFields();
+        // clearAddProductModalFields() já é chamado quando o modal é aberto novamente
     });
 
     // --- Configuração Inicial ---
