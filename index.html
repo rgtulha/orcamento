@@ -164,7 +164,7 @@
         </div>
     </div>
 
-    <!-- Modal para Adicionar Produto Manualmente -->
+     <!-- Modal para Adicionar Produto Manualmente -->
     <div id="addProductModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -176,8 +176,19 @@
                 <label for="productQuantityInput">Quantidade:</label>
                 <input type="number" id="productQuantityInput" value="1" min="1" required>
 
-                <label for="productUnitPriceInput">Valor Unitário (R$):</label>
-                <input type="number" id="productUnitPriceInput" value="0.00" min="0" step="0.01" required>
+                <label for="productBasePriceInput">Valor de Custo (R\$):</label>
+                <input type="number" id="productBasePriceInput" value="0.00" min="0" step="0.01" required>
+
+                <div class="profit-options">
+                    <label>Opção de Lucro:</label><br>
+                    <input type="radio" id="profit10" name="profitOption" value="0.10" checked>
+                    <label for="profit10">10% Lucro</label><br>
+                    <input type="radio" id="profit5" name="profitOption" value="0.05">
+                    <label for="profit5">5% Lucro</label>
+                </div>
+                
+                <label>Valor Final (Unitário - R\$):</label>
+                <span id="productFinalPriceDisplay" class="calculated-price-display">0,00</span>
             </div>
             <div class="modal-actions">
                 <button id="confirmAddProductBtn" class="action-button">Adicionar</button>
