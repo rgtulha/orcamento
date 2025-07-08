@@ -79,16 +79,16 @@ body {
 
 /* Estilo para a palavra "Orçamento" (agora na coluna esquerda) */
 .budget-title-label {
-    font-size: 28pt; /* Tamanho da fonte do orçamento */
+      font-size: 28pt; /* Tamanho da fonte do orçamento */
     font-weight: 700; /* Bold */
     color: #333;
     line-height: 1.1;
-    margin-top: 20px; /* Espaço acima de Orçamento da logo */
+    margin-top: 10px; /* MODIFICADO: Reduzido para aproximar da logo */
     margin-bottom: 15px; /* Espaço abaixo de Orçamento para o client-contact-info */
 }
 
 .client-contact-info {
-    font-family: 'Montserrat', sans-serif;
+     font-family: 'Montserrat', sans-serif;
     font-weight: 300; /* Light */
     margin-top: 15px; /* Espaço inicial para as informações do cliente */
     margin-bottom: 20px; /* Espaço após informações do cliente para a tabela */
@@ -96,7 +96,7 @@ body {
 
 /* Estilo para os dados do cliente e da empresa dentro de .client-contact-info */
 .client-contact-info p {
-    font-size: 11pt; /* Aumenta o tamanho da fonte */
+      font-size: 11pt; /* Aumenta o tamanho da fonte */
     color: #212d42;  /* Nova cor da fonte */
     line-height: 1.6;
     margin: 0; /* Reset margins para controle mais preciso */
@@ -108,7 +108,7 @@ body {
 
 /* NOVO: Espaço acima da primeira linha de contato (e-mail) */
 .client-contact-info p.contact-line:first-of-type {
-    margin-top: 45px; /* MODIFICADO: AUMENTADO o espaço entre CNPJ/CPF e E-mail */
+    margin-top: 60px; /* MODIFICADO: AUMENTADO o espaço entre CNPJ/CPF e E-mail */
 }
 
 
