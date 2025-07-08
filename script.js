@@ -131,9 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `
             <td class="col-num">${productData.budgetNum}</td>
             <td class="col-description">${productData.description}</td>
-            <td class="col-price">R$ ${formatCurrency(productData.unitPrice)}</td>
+            <td class="col-price">R\$ ${formatCurrency(productData.unitPrice)}</td>
             <td class="col-quantity">${productData.quantity}</td>
-            <td class="col-total product-total">R$ ${formatCurrency(productData.total)}</td>
+            <td class="col-total product-total">R\$ ${formatCurrency(productData.total)}</td>
         `;
         // Poderia adicionar um botão de remover item aqui se necessário
     }
