@@ -71,7 +71,7 @@ body {
 }
 
 .company-logo {
-    max-width: 280px; /* Aumenta um pouco o tamanho da logo */
+    max-width: 350px; /* Aumenta um pouco o tamanho da logo */
     height: auto;
     object-fit: contain;
     margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
