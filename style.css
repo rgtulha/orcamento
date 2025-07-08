@@ -290,6 +290,11 @@ body {
     outline: none;
 }
 
+/* NOVO: Classe para elementos que só aparecem na impressão */
+.print-only-display {
+    display: none; /* Escondido por padrão na tela */
+}
+
 /* Estilo para o endereço no rodapé */
 .budget-footer-address {
     margin-top: auto;
@@ -527,4 +532,25 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
+}
+
+/* --- ESTILOS PARA MODO DE IMPRESSÃO --- */
+/* Adiciona esta classe ao <body> para controlar a visibilidade dos elementos */
+body.print-mode #generatePdfBtn,
+body.print-mode #selectClientBtn,
+body.print-mode #addProductBtn,
+body.print-mode #accessAuthBtn,
+body.print-mode #logoutBtn,
+body.print-mode #auth-status,
+body.print-mode .main-action-buttons,
+body.print-mode .modal { /* Esconde modais se estiverem abertos */
+    display: none !important;
+}
+
+body.print-mode #discountInput { /* Esconde o input do desconto */
+    display: none !important;
+}
+
+body.print-mode #discountAmountDisplay { /* Mostra o span com o valor do desconto */
+    display: inline !important;
 }
