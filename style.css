@@ -66,14 +66,12 @@ body {
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
     /* NOVO: Ajuste de padding-top para alinhar a data com os dados do cliente */
-    /* Calculado: Altura da logo + margin-bottom da logo + margin-top de .client-contact-info */
-    /* (~90px logo + 5px logo-mb + 20px budget-title-label mt + ~35px budget-title-label height + 15px budget-title-label mb + 15px client-contact-info mt) */
-    /* Total na esquerda antes do "Cliente:" é ~180px */
-    padding-top: 175px; /* Ajuste fino para alinhamento da Data */
+    /* Este valor foi calculado para que o topo da Data (coluna direita) se alinhe com o topo da linha 'Cliente:' (coluna esquerda) */
+    padding-top: 195px; 
 }
 
 .company-logo {
-    max-width: 250px; /* Logo no canto esquerdo */
+    max-width: 280px; /* Aumenta um pouco o tamanho da logo */
     height: auto;
     object-fit: contain;
     margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
@@ -119,7 +117,7 @@ body {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-bottom: 5px; /* Espaço abaixo da Data */
+    margin-bottom: 15px; /* NOVO: Aumenta o espaço abaixo da Data para descer o Nº O.S. */
 }
 
 .budget-number {
