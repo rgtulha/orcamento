@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded - script.js iniciado.'); // Log de inicialização
+    console.log('DOM Content Loaded - script.js iniciado.');
 
     // --- Configuração e Inicialização do Firebase ---
     const firebaseConfig = {
@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
         firebase.initializeApp(firebaseConfig);
-        console.log('Firebase inicializado com sucesso.'); // Log de Firebase
+        console.log('Firebase inicializado com sucesso.');
     } catch (error) {
-        console.error('Erro ao inicializar Firebase:', error); // Erro de Firebase
+        console.error('Erro ao inicializar Firebase:', error);
     }
 
     const db = firebase.firestore();
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productTableBody = document.getElementById('productTableBody');
     const subtotalAmountSpan = document.getElementById('subtotalAmount');
     const discountInput = document.getElementById('discountInput');
-    const discountAmountDisplay = document.getElementById('discountAmountDisplay'); // NOVO: Elemento para exibir o desconto
+    const discountAmountDisplay = document.getElementById('discountAmountDisplay'); // Elemento para exibir o desconto
     const grandTotalSpan = document.getElementById('grandTotal');
     const generatePdfBtn = document.getElementById('generatePdfBtn');
     const appContainer = document.querySelector('.app-container');
@@ -110,17 +110,28 @@ document.addEventListener('DOMContentLoaded', () => {
      * Atualiza o subtotal, desconto e total geral exibidos no documento do orçamento.
      */
     function updateTotals() {
+        console.log('--- updateTotals() called ---');
+        console.log('productsInBudget:', productsInBudget);
+
         let subtotal = 0;
         productsInBudget.forEach(product => {
+            console.log(`Product: ${product.description}, Quantity: ${product.quantity}, UnitPrice: ${product.unitPrice}, Total: ${product.total}`);
             subtotal += product.total;
         });
+        console.log('Calculated subtotal:', subtotal);
 
-        const discountValue = parseFloat(discountInput.value) || 0;
+        // Garante que discountInput.value é um número válido, ou 0
+        const discountValue = parseFloat(discountInput.value.replace(',', '.')) || 0; 
+        console.log('Discount input value (raw):', discountInput.value);
+        console.log('Parsed discountValue:', discountValue);
+
         const finalTotal = subtotal - discountValue;
+        console.log('Calculated finalTotal (subtotal - discount):', finalTotal);
 
         subtotalAmountSpan.textContent = formatCurrency(subtotal);
-        discountAmountDisplay.textContent = formatCurrency(discountValue); // NOVO: Atualiza o span do desconto
+        discountAmountDisplay.textContent = formatCurrency(discountValue); // Atualiza o span do desconto
         grandTotalSpan.textContent = formatCurrency(finalTotal);
+        console.log('--- updateTotals() finished ---');
     }
 
     /**
@@ -166,14 +177,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // FUNÇÃO PARA ABRIR QUALQUER MODAL
     const openModal = (modalElement) => {
-        console.log(`Abrindo modal: ${modalElement.id}`); // Log para debug
+        console.log(`Abrindo modal: ${modalElement.id}`);
         modalElement.classList.add('active');
         modalElement.querySelector('input, select, textarea')?.focus();
     };
 
     // FUNÇÃO PARA FECHAR QUALQUER MODAL
     const closeAllModals = () => {
-        console.log('Fechando todos os modais.'); // Log para debug
+        console.log('Fechando todos os modais.');
         authModal.classList.remove('active');
         listClientsModal.classList.remove('active');
         addProductModal.classList.remove('active');
@@ -181,22 +192,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica de Autenticação - CRÍTICO para a visibilidade dos botões
     const updateUI = (user) => {
-        console.log('updateUI acionada. Status do usuário:', user ? user.email : 'Nenhum usuário logado'); // Log CRÍTICO
+        console.log('updateUI acionada. Status do usuário:', user ? user.email : 'Nenhum usuário logado');
 
         if (user) {
             authStatus.textContent = `Logado como: ${user.email}`;
-            accessAuthBtn.style.display = 'none'; // Esconde o botão "Acessar"
-            logoutBtn.style.display = 'inline-block'; // Mostra o botão "Sair"
-            selectClientBtn.style.display = 'inline-block'; // Mostra "Adicionar/Selecionar Cliente"
-            addProductBtn.style.display = 'inline-block'; // Mostra "Adicionar Produto"
-            console.log('Botões de funcionalidade e "Sair" visíveis. "Acessar" oculto.'); // Log CRÍTICO
+            accessAuthBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+            selectClientBtn.style.display = 'inline-block';
+            addProductBtn.style.display = 'inline-block';
+            console.log('Botões de funcionalidade e "Sair" visíveis. "Acessar" oculto.');
         } else {
             authStatus.textContent = 'Por favor, faça login para acessar funcionalidades de cliente e orçamento.';
-            accessAuthBtn.style.display = 'inline-block'; // Mostra o botão "Acessar"
-            logoutBtn.style.display = 'none'; // Esconde o botão "Sair"
-            selectClientBtn.style.display = 'none'; // Esconde "Adicionar/Selecionar Cliente"
-            addProductBtn.style.display = 'none'; // Esconde "Adicionar Produto"
-            console.log('Botões de funcionalidade e "Sair" ocultos. "Acessar" visível.'); // Log CRÍTICO
+            accessAuthBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+            selectClientBtn.style.display = 'none';
+            addProductBtn.style.display = 'none';
+            console.log('Botões de funcionalidade e "Sair" ocultos. "Acessar" visível.');
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
         }
@@ -319,21 +330,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listener para o input de desconto (atualiza totais ao digitar)
     discountInput.addEventListener('input', updateTotals);
 
-    // Listener de evento para o botão "Gerar PDF"
+    // Listener de evento para o botão "Imprimir"
     generatePdfBtn.addEventListener('click', () => {
-        // Esconde elementos da UI que não devem aparecer no PDF
-        generatePdfBtn.style.display = 'none';
-        selectClientBtn.style.display = 'none';
-        addProductBtn.style.display = 'none'; // Esconder o botão de adicionar produto
-        accessAuthBtn.style.display = 'none'; // Esconder o botão de acesso
-        logoutBtn.style.display = 'none'; // Esconder o botão de logout
-        authStatus.style.display = 'none'; // Esconder o status
-
-        // NOVO: Oculta o input e mostra o span do desconto para a impressão
-        discountInput.style.display = 'none';
-        discountAmountDisplay.style.display = 'inline'; // Ajuste conforme necessário (inline-block, block)
-
-        console.log('PDF gerando. Botões principais temporariamente ocultos.'); // Log de PDF
+        // Adiciona a classe para ocultar elementos de UI durante a impressão
+        document.body.classList.add('print-mode');
+        console.log('PDF gerando. Modo de impressão ativado.');
 
         const scale = 4; // AUMENTADO para melhor qualidade
 
@@ -366,23 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             pdf.save('Orcamento_SUPPORTA.pdf');
 
-            // Mostra novamente os elementos da UI após a conclusão da geração do PDF
-            generatePdfBtn.style.display = 'block';
-            authStatus.style.display = 'block'; // Restaurar a visibilidade do status
-
-            // NOVO: Restaura o input e oculta o span do desconto
-            discountInput.style.display = 'inline-block';
-            discountAmountDisplay.style.display = 'none';
-
-            if (auth.currentUser) {
-                selectClientBtn.style.display = 'inline-block';
-                addProductBtn.style.display = 'inline-block';
-                logoutBtn.style.display = 'inline-block'; // Restaurar botão de logout
-                console.log('PDF gerado. Botões principais restaurados (se logado).'); // Log de PDF
-            } else {
-                accessAuthBtn.style.display = 'inline-block'; // Restaurar botão de acesso
-                console.log('PDF gerado. Usuário deslogado, botões principais permanecerão ocultos exceto "Acessar".');
-            }
+            // Remove a classe para restaurar a UI
+            document.body.classList.remove('print-mode');
+            console.log('PDF gerado. Modo de impressão desativado.');
         });
     });
 
@@ -396,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     selectClientBtn.addEventListener('click', () => {
-        console.log('Botão Adicionar/Selecionar Cliente clicado.'); // Log para debug
+        console.log('Botão Adicionar/Selecionar Cliente clicado.');
         if (!auth.currentUser) {
             alert('Faça login para gerenciar clientes.');
             return;
@@ -433,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Logout realizado com sucesso!');
             budgetClientNameSpan.textContent = '';
             budgetClientCnpjCpfSpan.textContent = '';
-            console.log('Logout bem-sucedido. updateUI será acionado.'); // Log de logout
+            console.log('Logout bem-sucedido. updateUI será acionado.');
         } catch (error) {
             console.error("Erro ao fazer logout:", error);
             alert(`Erro ao fazer logout: ${error.message}`);
@@ -447,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await auth.createUserWithEmailAndPassword(email, password);
             alert('Usuário cadastrado e logado com sucesso!');
             closeAllModals();
-            console.log('Registro bem-sucedido. updateUI será acionado.'); // Log de registro
+            console.log('Registro bem-sucedido. updateUI será acionado.');
         } catch (error) {
             console.error("Erro ao cadastrar:", error);
             alert(`Erro ao cadastrar: ${error.message}`);
@@ -461,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await auth.signInWithEmailAndPassword(email, password);
             alert('Login realizado com sucesso!');
             closeAllModals();
-            console.log('Login bem-sucedido. updateUI será acionado.'); // Log de login
+            console.log('Login bem-sucedido. updateUI será acionado.');
         } catch (error) {
             console.error("Erro ao fazer login:", error);
             alert(`Erro ao fazer login: ${error.message}`);
@@ -589,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica para Adicionar Produto ---
 
     addProductBtn.addEventListener('click', () => {
-        console.log('Botão Adicionar Produto clicado.'); // Log para debug
+        console.log('Botão Adicionar Produto clicado.');
         if (!auth.currentUser) {
             alert('Faça login para adicionar produtos ao orçamento.');
             return;
@@ -601,8 +588,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     confirmAddProductBtn.addEventListener('click', () => {
         const description = productDescriptionInput.value.trim();
+        // Garante que quantity é um número inteiro e unitPrice é um float, substituindo ',' por '.'
         const quantity = parseInt(productQuantityInput.value);
-        const unitPrice = parseFloat(productUnitPriceInput.value);
+        const unitPrice = parseFloat(productUnitPriceInput.value.replace(',', '.'));
+
+        console.log(`Adding product - Desc: ${description}, Qty: ${quantity}, UnitPrice: ${unitPrice}`);
+        console.log(`Typeof Qty: ${typeof quantity}, Typeof UnitPrice: ${typeof unitPrice}`);
+        console.log(`isNaN(quantity): ${isNaN(quantity)}, isNaN(unitPrice): ${isNaN(unitPrice)}`);
+
 
         if (!description) {
             alert('A descrição do produto é obrigatória.');
@@ -633,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         productsInBudget.push(newProduct);
         addProductToBudgetTable(newProduct);
-        updateTotals();
+        updateTotals(); // Chama updateTotals após adicionar o produto
         closeAllModals();
     });
 
@@ -644,5 +637,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Configuração Inicial ---
     setupInitialBudgetValues();
-    updateTotals();
+    updateTotals(); // Garante que os totais são calculados no carregamento inicial
 });
