@@ -108,7 +108,7 @@ body {
 
 /* NOVO: Espaço acima da primeira linha de contato (e-mail) */
 .client-contact-info p.contact-line:first-of-type {
-    margin-top: 30px; /* AUMENTADO: Espaço entre CNPJ/CPF e E-mail */
+    margin-top: 45px; /* MODIFICADO: AUMENTADO o espaço entre CNPJ/CPF e E-mail */
 }
 
 
@@ -117,7 +117,7 @@ body {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-bottom: 25px; /* AUMENTADO: Mais espaço abaixo da Data para descer o Nº O.S. */
+    margin-bottom: 40px; /* MODIFICADO: AUMENTADO o espaço abaixo da Data para descer o Nº O.S. */
 }
 
 .budget-number {
