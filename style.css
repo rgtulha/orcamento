@@ -66,12 +66,12 @@ body {
     text-align: right; /* Alinha o texto à direita */
     flex: 1; /* Ocupa o espaço disponível à direita */
     /* NOVO: Ajuste de padding-top para alinhar a data com os dados do cliente */
-    /* Este valor foi calculado para que o topo da Data (coluna direita) se alinhe com o topo da linha 'Cliente:' (coluna esquerda) */
+    /* Este valor foi calculado para que o topo da Data (coluna direita) se alinha com o topo da linha 'Cliente:' (coluna esquerda) */
     padding-top: 195px; 
 }
 
 .company-logo {
-    max-width: 350px; /* Aumenta um pouco o tamanho da logo */
+    max-width: 350px; /* MODIFICADO: Aumenta o tamanho máximo da logo */
     height: auto;
     object-fit: contain;
     margin-bottom: 5px; /* Espaço entre logo e dados do cliente */
@@ -79,7 +79,7 @@ body {
 
 /* Estilo para a palavra "Orçamento" (agora na coluna esquerda) */
 .budget-title-label {
-      font-size: 28pt; /* Tamanho da fonte do orçamento */
+    font-size: 28pt; /* Tamanho da fonte do orçamento */
     font-weight: 700; /* Bold */
     color: #333;
     line-height: 1.1;
@@ -88,7 +88,7 @@ body {
 }
 
 .client-contact-info {
-     font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 300; /* Light */
     margin-top: 15px; /* Espaço inicial para as informações do cliente */
     margin-bottom: 20px; /* Espaço após informações do cliente para a tabela */
@@ -96,7 +96,7 @@ body {
 
 /* Estilo para os dados do cliente e da empresa dentro de .client-contact-info */
 .client-contact-info p {
-      font-size: 11pt; /* Aumenta o tamanho da fonte */
+    font-size: 11pt; /* Aumenta o tamanho da fonte */
     color: #212d42;  /* Nova cor da fonte */
     line-height: 1.6;
     margin: 0; /* Reset margins para controle mais preciso */
@@ -106,7 +106,7 @@ body {
     margin-bottom: 0; /* Removendo margin-bottom daqui para controlar no p.contact-line */
 }
 
-/* NOVO: Espaço acima da primeira linha de contato (e-mail) */
+/* Espaço acima da primeira linha de contato (e-mail) */
 .client-contact-info p.contact-line:first-of-type {
     margin-top: 60px; /* MODIFICADO: AUMENTADO o espaço entre CNPJ/CPF e E-mail */
 }
@@ -220,9 +220,15 @@ body {
 
 .total-boxes-container {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-direction: column; /* MODIFICADO: Para empilhar o Subtotal e o grupo Desconto/Total */
+    justify-content: flex-end; /* Mantém o alinhamento à direita dentro do summary-section */
+    gap: 10px; /* Espaço entre a caixa Subtotal e o grupo Desconto/Total */
+}
+
+/* NOVO: Estilo para o contêiner de Desconto e Total */
+.discount-and-grand-total {
+    display: flex; /* Para manter Desconto e Total lado a lado */
+    gap: 10px; /* Espaço entre as caixas Desconto e Total */
 }
 
 .summary-box {
