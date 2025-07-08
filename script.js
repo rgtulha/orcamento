@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const discountInput = document.getElementById('discountInput');
     const grandTotalSpan = document.getElementById('grandTotal');
     const generatePdfBtn = document.getElementById('generatePdfBtn');
-    const budgetDocument = document.getElementById('budgetDocument');
+    // const budgetDocument = document.getElementById('budgetDocument'); // REMOVIDO: Antigo alvo do html2canvas
+    const appContainer = document.querySelector('.app-container'); // NOVO: Alvo do html2canvas agora é o container geral
     const currentDateSpan = document.getElementById('currentDate');
     const budgetNumberSpan = document.getElementById('budgetNumber');
 
@@ -331,12 +332,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const scale = 4; // AUMENTADO para melhor qualidade
 
-        html2canvas(budgetDocument, {
+        html2canvas(appContainer, { // MODIFICADO: Agora captura o '.app-container' para incluir as margens
             scale: scale,
             useCORS: true,
             logging: false,
-            windowWidth: budgetDocument.scrollWidth,
-            windowHeight: budgetDocument.scrollHeight
+            // windowWidth e windowHeight removidos para que html2canvas use as dimensões do alvo
         }).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
 
