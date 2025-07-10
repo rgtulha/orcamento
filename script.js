@@ -85,10 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeAddProductModalBtn = addProductModal.querySelector('.close-button');
     const productDescriptionInput = document.getElementById('productDescriptionInput');
     const productQuantityInput = document.getElementById('productQuantityInput');
-    const productBasePriceInput = document.getElementById('productBasePriceInput'); // NOVO: Valor de Custo
-    const profit10Radio = document.getElementById('profit10'); // NOVO: Opção de Lucro 10%
-    const profit5Radio = document.getElementById('profit5'); // NOVO: Opção de Lucro 5%
-    const productFinalPriceDisplay = document.getElementById('productFinalPriceDisplay'); // NOVO: Span para exibir o valor final calculado
+    const productBasePriceInput = document.getElementById('productBasePriceInput'); // Valor de Custo
+    const profitSelect = document.getElementById('profitSelect'); // MODIFICADO: Agora é um select
+    const productFinalPriceDisplay = document.getElementById('productFinalPriceDisplay'); // Span para exibir o valor final calculado
     const confirmAddProductBtn = document.getElementById('confirmAddProductBtn');
     const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
 
@@ -161,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productDescriptionInput.value = '';
         productQuantityInput.value = '1';
         productBasePriceInput.value = '0.00'; // Reseta o valor de custo
-        profit10Radio.checked = true; // Define 10% de lucro como padrão
+        profitSelect.value = '0.10'; // Define 10% de lucro como padrão no select
         calculateAndDisplayFinalPrice(); // Calcula e exibe o valor inicial (0.00)
     }
 
@@ -186,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function calculateAndDisplayFinalPrice() {
         const basePrice = parseFloat(productBasePriceInput.value.replace(',', '.')) || 0;
-        const selectedProfitPercentage = parseFloat(document.querySelector('input[name="profitOption"]:checked').value);
+        const selectedProfitPercentage = parseFloat(profitSelect.value); // MODIFICADO: Pega o valor do select
 
         if (isNaN(basePrice) || basePrice < 0) {
             productFinalPriceDisplay.textContent = formatCurrency(0);
@@ -619,10 +618,9 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal(addProductModal); // openModal já chama clearAddProductModalFields() e foca
     });
 
-    // NOVO: Adiciona listeners para o cálculo em tempo real no modal
+    // Adiciona listeners para o cálculo em tempo real no modal
     productBasePriceInput.addEventListener('input', calculateAndDisplayFinalPrice);
-    profit10Radio.addEventListener('change', calculateAndDisplayFinalPrice);
-    profit5Radio.addEventListener('change', calculateAndDisplayFinalPrice);
+    profitSelect.addEventListener('change', calculateAndDisplayFinalPrice); // MODIFICADO: Listener para o select
 
     confirmAddProductBtn.addEventListener('click', () => {
         const description = productDescriptionInput.value.trim();
