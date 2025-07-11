@@ -536,9 +536,27 @@ body {
 }
 
 .modal-form-fields .profit-options label {
-    display: inline-block; /* Para alinhar labels com radio buttons */
-    margin-right: 10px;
-    font-weight: normal; /* Labels de rádio não precisam ser negrito */
+   display: block; /* Label acima do select */
+    margin-bottom: 5px;
+    font-weight: bold; /* Manter negrito para a label do select */
+    color: #555;
+}
+.modal-form-fields select { /* NOVO: Estilo para o select */
+    width: calc(100% - 20px); /* Mesma largura dos inputs */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    -webkit-appearance: none; /* Remove estilo padrão do navegador */
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.1H18.6c-5.8%200-11.2%203.4-13.2%209.7-2.1%206.5-.4%2013.9%204.7%2018.8l128%20127.9c5%205%2012.3%207.7%2019.4%207.7s14.4-2.7%2019.4-7.7l128-127.9c5.1-4.9%206.9-12.3%204.8-18.8z%22%2F%3E%3C%2Fsvg%3E'); /* Ícone de seta para o select */
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px;
+    padding-right: 30px; /* Espaço para a seta */
 }
 
 .modal-form-fields .profit-options input[type="radio"] {
