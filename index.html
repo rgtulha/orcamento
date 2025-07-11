@@ -165,7 +165,7 @@
     </div>
 
      <!-- Modal para Adicionar Produto Manualmente -->
-    <div id="addProductModal" class="modal">
+   <div id="addProductModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Adicionar Produto ao Orçamento</h2>
@@ -180,11 +180,16 @@
                 <input type="number" id="productBasePriceInput" value="0.00" min="0" step="0.01" required>
 
                 <div class="profit-options">
-                    <label>Opção de Lucro:</label><br>
-                    <input type="radio" id="profit10" name="profitOption" value="0.10" checked>
-                    <label for="profit10">10% Lucro</label><br>
-                    <input type="radio" id="profit5" name="profitOption" value="0.05">
-                    <label for="profit5">5% Lucro</label>
+                    <label for="profitSelect">Opção de Lucro:</label>
+                    <select id="profitSelect"> <!-- MODIFICADO: Agora é um <select> -->
+                        <option value="0.05">5% Lucro</option>
+                        <option value="0.10" selected>10% Lucro</option> <!-- 10% selecionado por padrão -->
+                        <option value="0.15">15% Lucro</option>
+                        <option value="0.20">20% Lucro</option>
+                        <option value="0.25">25% Lucro</option>
+                        <option value="0.30">30% Lucro</option>
+                        <option value="0.35">35% Lucro</option>
+                    </select>
                 </div>
                 
                 <label>Valor Final (Unitário - R\$):</label>
