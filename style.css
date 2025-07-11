@@ -558,13 +558,6 @@ body {
     background-size: 12px;
     padding-right: 30px; /* Espaço para a seta */
 }
-
-.modal-form-fields .profit-options input[type="radio"] {
-    width: auto; /* Radio buttons devem ter largura automática */
-    margin-right: 5px;
-    margin-bottom: 0; /* Remover margin-bottom extra */
-}
-
 .calculated-price-display {
     display: block; /* Ocupa a linha inteira */
     padding: 10px;
