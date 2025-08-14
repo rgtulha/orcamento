@@ -91,6 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmAddProductBtn = document.getElementById('confirmAddProductBtn');
     const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
 
+    // NOVO: Elementos de Forma de Pagamento
+    const paymentMethodSelect = document.getElementById('paymentMethodSelect');
+    const paymentMethodDisplay = document.getElementById('paymentMethodDisplay');
+
     // --- Variáveis de Controle ---
     let productsInBudget = []; // Array que armazena os objetos dos produtos no orçamento
     let nextProductNumber = 1; // Para a coluna 'Nº' da tabela do orçamento
@@ -184,6 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDateSpan.textContent = `${day}/${month}/${year}`;
 
         budgetNumberSpan.textContent = String(Math.floor(Math.random() * 900) + 100);
+
+        // NOVO: Configura a forma de pagamento inicial
+        paymentMethodSelect.value = 'à vista'; // Garante que o select começa com 'à vista'
+        paymentMethodDisplay.textContent = 'à vista'; // Garante que o display também mostre 'à vista'
     }
 
     // --- Funções de Cálculo de Preço ---
@@ -287,6 +295,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteProduct(productId) {
         if (confirm('Tem certeza que deseja excluir este produto?')) {
             productsInBudget = productsInBudget.filter(product => product.id != productId);
+            // Reajusta o budgetNum dos produtos restantes se desejar
+            productsInBudget.forEach((product, index) => {
+                product.budgetNum = index + 1;
+            });
+            nextProductNumber = productsInBudget.length > 0 ? Math.max(...productsInBudget.map(p => p.budgetNum)) + 1 : 1;
             renderProductTable(); // Re-renderiza a tabela sem o produto excluído
         }
     }
@@ -413,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 editClient(clientId, row.dataset);
             });
             row.querySelector('.delete-btn').addEventListener('click', () => {
-                deleteClient(clientId);
+                deleteClientFirebase(clientId); // Alterado para o nome específico do Firebase delete
             });
         });
     };
@@ -459,10 +472,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listener para o input de desconto (atualiza totais ao digitar)
     discountInput.addEventListener('input', updateTotals);
 
+    // NOVO: Listener para a seleção da forma de pagamento
+    paymentMethodSelect.addEventListener('change', () => {
+        paymentMethodDisplay.textContent = paymentMethodSelect.value;
+    });
+
     // Listener de evento para o botão "Imprimir"
     generatePdfBtn.addEventListener('click', () => {
         document.body.classList.add('print-mode');
         console.log('PDF gerando. Modo de impressão ativado.');
+
+        // Oculta o input de desconto e o select de forma de pagamento, mostra os spans de display
+        discountInput.style.display = 'none';
+        discountAmountDisplay.style.display = 'inline';
+        paymentMethodSelect.style.display = 'none';
+        paymentMethodDisplay.style.display = 'inline';
 
         const scale = 4; // AUMENTADO para melhor qualidade
 
@@ -501,6 +525,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const day = String(today.getDate()).padStart(2, '0');
             const fileName = `${companyName}_${year}-${month}-${day}.pdf`;
             pdf.save(fileName);
+
+            // Restaura a visibilidade dos inputs e selects após a geração do PDF
+            discountInput.style.display = ''; // Volta ao default CSS
+            discountAmountDisplay.style.display = ''; // Volta ao default CSS (display: none)
+            paymentMethodSelect.style.display = ''; // Volta ao default CSS
+            paymentMethodDisplay.style.display = ''; // Volta ao default CSS (display: none)
 
             document.body.classList.remove('print-mode');
             console.log('PDF gerado. Modo de impressão desativado.');
