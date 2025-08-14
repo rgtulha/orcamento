@@ -237,6 +237,28 @@ body {
     flex: 1;
 }
 
+/* NOVO: Estilo para o select da forma de pagamento */
+.payment-info select {
+    width: auto; /* Permite que o select se ajuste ao conteúdo */
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    -webkit-appearance: none; /* Remove estilo padrão do navegador */
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    /* Ícone de seta para o select */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.1H18.6c-5.8%200-11.2%203.4-13.2%209.7-2.1%206.5-.4%2013.9%204.7%2018.8l128%20127.9c5%205%2012.3%207.7%2019.4%207.7s14.4-2.7%2019.4-7.7l128-127.9c5.1-4.9%206.9-12.3%204.8-18.8z%22%2F%3E%3C%2Fsvg%3E'); 
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 10px;
+    padding-right: 25px; /* Espaço para a seta */
+    vertical-align: middle; /* Alinha com o texto */
+    margin-left: 5px; /* Espaço entre o texto e o select */
+}
+
+
 .total-boxes-container {
     display: flex;
     flex-direction: column; /* Para empilhar o Subtotal e o grupo Desconto/Total */
@@ -573,7 +595,7 @@ body {
     color: #555;
 }
 
-.modal-form-fields select { /* NOVO: Estilo para o select */
+.modal-form-fields select { /* Estilo para o select (geral, para modais) */
     width: calc(100% - 20px); /* Mesma largura dos inputs */
     padding: 10px;
     margin-bottom: 15px;
@@ -615,7 +637,8 @@ body.print-mode #logoutBtn,
 body.print-mode #auth-status,
 body.print-mode .main-action-buttons,
 body.print-mode .modal, /* Esconde modais se estiverem abertos */
-body.print-mode .col-actions /* Esconde a coluna de ações na impressão */
+body.print-mode .col-actions, /* Esconde a coluna de ações na impressão */
+body.print-mode #paymentMethodSelect /* NOVO: Esconde o select da forma de pagamento na impressão */
  { 
     display: none !important;
 }
@@ -624,6 +647,8 @@ body.print-mode #discountInput { /* Esconde o input do desconto */
     display: none !important;
 }
 
-body.print-mode #discountAmountDisplay { /* Mostra o span com o valor do desconto */
+body.print-mode #discountAmountDisplay, /* Mostra o span com o valor do desconto */
+body.print-mode #paymentMethodDisplay /* NOVO: Mostra o span da forma de pagamento na impressão */
+{ 
     display: inline !important;
 }
