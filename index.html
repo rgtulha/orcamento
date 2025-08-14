@@ -77,7 +77,16 @@
 
             <div class="summary-section">
                 <div class="payment-info">
-                    <p>Forma de pagamento: <span id="paymentMethod">à vista.</span></p>
+                    <p>Forma de pagamento: 
+                    <span id="paymentMethodDisplay" class="print-only-display"></span> <!-- Display para impressão -->
+                    <select id="paymentMethodSelect">
+                    <option value="à vista">à vista</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Crédito">Crédito</option>
+                    <option value="Débito">Débito</option>
+                    </select>
+                    </p>
                 </div>
                 <div class="total-boxes-container">
                     <div class="summary-box subtotal-box">
