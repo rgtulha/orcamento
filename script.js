@@ -80,19 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateClientModalBtn = document.getElementById('updateClientModalBtn');
     const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
 
-    // Modal para Adicionar Produto Manualmente - NOVOS SELECTORES
+    // Modal para Adicionar Produto Manualmente
     const addProductModal = document.getElementById('addProductModal');
     const closeAddProductModalBtn = addProductModal.querySelector('.close-button');
     const productDescriptionInput = document.getElementById('productDescriptionInput');
     const productQuantityInput = document.getElementById('productQuantityInput');
     const productBasePriceInput = document.getElementById('productBasePriceInput'); // Valor de Custo
-    const profitSelect = document.getElementById('profitSelect'); // MODIFICADO: Agora é um select
+    const profitSelect = document.getElementById('profitSelect'); // Select de Opção de Lucro
     const productFinalPriceDisplay = document.getElementById('productFinalPriceDisplay'); // Span para exibir o valor final calculado
     const confirmAddProductBtn = document.getElementById('confirmAddProductBtn');
     const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
 
     // --- Variáveis de Controle ---
-    let productsInBudget = [];
+    let productsInBudget = []; // Array que armazena os objetos dos produtos no orçamento
     let nextProductNumber = 1; // Para a coluna 'Nº' da tabela do orçamento
     let listSearchTimeout;
     let currentClientBeingEdited = null;
@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Atualiza o subtotal, desconto e total geral exibidos no documento do orçamento.
+     * Esta função é chamada após qualquer alteração nos produtos ou no desconto.
      */
     function updateTotals() {
         console.log('--- updateTotals() called ---');
@@ -117,14 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let subtotal = 0;
         productsInBudget.forEach(product => {
-            console.log(`Product: ${product.description}, Quantity: ${product.quantity}, UnitPrice: ${product.unitPrice}, Total: ${product.total}`);
             subtotal += product.total;
         });
         console.log('Calculated subtotal:', subtotal);
 
-        // Garante que discountInput.value é um número válido, ou 0
         const discountValue = parseFloat(discountInput.value.replace(',', '.')) || 0; 
-        console.log('Discount input value (raw):', discountInput.value);
         console.log('Parsed discountValue:', discountValue);
 
         const finalTotal = subtotal - discountValue;
@@ -137,20 +135,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Adiciona um produto à tabela do orçamento e atualiza os totais.
-     * @param {Object} productData - Objeto contendo id, description, quantity, unitPrice, total.
+     * Renderiza (ou re-renderiza) a tabela de produtos completa com base no array productsInBudget.
+     * Esta é uma prática robusta para manter a UI sincronizada com os dados.
      */
-    function addProductToBudgetTable(productData) {
-        const row = productTableBody.insertRow();
-        row.dataset.productId = productData.id; // Garante um ID único para a linha
-        row.innerHTML = `
-            <td class="col-num">${productData.budgetNum}</td>
-            <td class="col-description">${productData.description}</td>
-            <td class="col-price">R\$${formatCurrency(productData.unitPrice)}</td>
-            <td class="col-quantity">${productData.quantity}</td>
-            <td class="col-total product-total">R\$${formatCurrency(productData.total)}</td>
-        `;
-        // Poderia adicionar um botão de remover item aqui se necessário
+    function renderProductTable() {
+        productTableBody.innerHTML = ''; // Limpa a tabela existente
+        productsInBudget.forEach(product => {
+            const row = productTableBody.insertRow();
+            row.dataset.productId = product.id; // Guarda o ID único do produto na linha
+
+            // Preenche as células com os dados do produto
+            row.innerHTML = `
+                <td class="col-num">${product.budgetNum}</td>
+                <td class="col-description" data-field="description">${product.description}</td>
+                <td class="col-price" data-field="unitPrice">R$${formatCurrency(product.unitPrice)}</td>
+                <td class="col-quantity" data-field="quantity">${product.quantity}</td>
+                <td class="col-total product-total">R$${formatCurrency(product.total)}</td>
+                <td class="col-actions">
+                    <button class="edit-product-btn action-button small-button">Editar</button>
+                    <button class="save-product-btn action-button small-button" style="display:none;">Salvar</button>
+                    <button class="cancel-edit-product-btn action-button secondary small-button" style="display:none;">Cancelar</button>
+                    <button class="delete-product-btn action-button secondary small-button">Excluir</button>
+                </td>
+            `;
+        });
+        updateTotals(); // Recalcula e atualiza os totais após a renderização
     }
 
     /**
@@ -177,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         budgetNumberSpan.textContent = String(Math.floor(Math.random() * 900) + 100);
     }
 
-    // --- Funções de Cálculo de Preço (NOVO) ---
+    // --- Funções de Cálculo de Preço ---
     const TAX_PERCENTAGE = 0.06; // 6% de imposto
 
     /**
@@ -185,19 +194,101 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function calculateAndDisplayFinalPrice() {
         const basePrice = parseFloat(productBasePriceInput.value.replace(',', '.')) || 0;
-        const selectedProfitPercentage = parseFloat(profitSelect.value); // MODIFICADO: Pega o valor do select
+        const selectedProfitPercentage = parseFloat(profitSelect.value);
 
         if (isNaN(basePrice) || basePrice < 0) {
             productFinalPriceDisplay.textContent = formatCurrency(0);
             return;
         }
 
-        // Calcula o preço com lucro
         const priceWithProfit = basePrice * (1 + selectedProfitPercentage);
-        // Calcula o preço final aplicando o imposto sobre o preço com lucro
         const finalPrice = priceWithProfit * (1 + TAX_PERCENTAGE);
         
         productFinalPriceDisplay.textContent = formatCurrency(finalPrice);
+    }
+
+    // --- Funções para Edição de Produtos ---
+    /**
+     * Ativa o modo de edição para uma linha de produto.
+     * @param {string} productId - ID do produto a ser editado.
+     * @param {HTMLElement} row - Elemento <tr> da linha do produto.
+     */
+    function enableEditMode(productId, row) {
+        const product = productsInBudget.find(p => p.id == productId);
+        if (!product) return;
+
+        // Esconde botões de ação e mostra botões de edição
+        row.querySelector('.edit-product-btn').style.display = 'none';
+        row.querySelector('.delete-product-btn').style.display = 'none';
+        row.querySelector('.save-product-btn').style.display = 'inline-block';
+        row.querySelector('.cancel-edit-product-btn').style.display = 'inline-block';
+
+        // Torna as células editáveis
+        const descriptionCell = row.querySelector('[data-field="description"]');
+        const quantityCell = row.querySelector('[data-field="quantity"]');
+        const unitPriceCell = row.querySelector('[data-field="unitPrice"]');
+
+        descriptionCell.innerHTML = `<input type="text" value="${product.description}">`;
+        quantityCell.innerHTML = `<input type="number" value="${product.quantity}">`;
+        // Remove 'R$' ao editar o preço para facilitar a entrada numérica
+        unitPriceCell.innerHTML = `<input type="number" step="0.01" value="${product.unitPrice.toFixed(2).replace('.', ',')}">`;
+    }
+
+    /**
+     * Salva as edições de um produto.
+     * @param {string} productId - ID do produto.
+     * @param {HTMLElement} row - Elemento <tr> da linha do produto.
+     */
+    function saveEditedProduct(productId, row) {
+        const productIndex = productsInBudget.findIndex(p => p.id == productId);
+        if (productIndex === -1) return;
+
+        const descriptionInput = row.querySelector('[data-field="description"] input');
+        const quantityInput = row.querySelector('[data-field="quantity"] input');
+        const unitPriceInput = row.querySelector('[data-field="unitPrice"] input');
+
+        const newDescription = descriptionInput.value.trim();
+        const newQuantity = parseInt(quantityInput.value);
+        const newUnitPrice = parseFloat(unitPriceInput.value.replace(',', '.'));
+
+        if (!newDescription) {
+            alert('A descrição não pode ser vazia.');
+            return;
+        }
+        if (isNaN(newQuantity) || newQuantity <= 0) {
+            alert('A quantidade deve ser um número inteiro positivo.');
+            return;
+        }
+        if (isNaN(newUnitPrice) || newUnitPrice < 0) {
+            alert('O valor unitário deve ser um número não negativo.');
+            return;
+        }
+
+        productsInBudget[productIndex].description = newDescription;
+        productsInBudget[productIndex].quantity = newQuantity;
+        productsInBudget[productIndex].unitPrice = newUnitPrice;
+        productsInBudget[productIndex].total = newQuantity * newUnitPrice;
+
+        renderProductTable(); // Re-renderiza a tabela para exibir as alterações
+    }
+
+    /**
+     * Cancela o modo de edição para uma linha de produto, revertendo para os valores originais.
+     * @param {string} productId - ID do produto.
+     */
+    function cancelEditMode(productId) {
+        renderProductTable(); // Simplesmente re-renderiza a tabela, desfazendo as alterações de input
+    }
+
+    /**
+     * Exclui um produto do orçamento.
+     * @param {string} productId - ID do produto a ser excluído.
+     */
+    function deleteProduct(productId) {
+        if (confirm('Tem certeza que deseja excluir este produto?')) {
+            productsInBudget = productsInBudget.filter(product => product.id != productId);
+            renderProductTable(); // Re-renderiza a tabela sem o produto excluído
+        }
     }
 
 
@@ -212,7 +303,11 @@ document.addEventListener('DOMContentLoaded', () => {
             clearAddProductModalFields(); // Limpa e define valores iniciais
             productDescriptionInput.focus();
         } else {
-            modalElement.querySelector('input, select, textarea')?.focus();
+            // Foca no primeiro input, select ou textarea disponível
+            const firstInput = modalElement.querySelector('input, select, textarea');
+            if (firstInput) {
+                firstInput.focus();
+            }
         }
     };
 
@@ -341,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editModalClienteNome.focus();
     };
 
-    const deleteClient = async (clientId) => {
+    const deleteClientFirebase = async (clientId) => { // Renomeado para evitar conflito com a nova função deleteProduct
         if (!auth.currentUser) {
             alert('Faça login para excluir clientes.');
             return;
@@ -366,7 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Listener de evento para o botão "Imprimir"
     generatePdfBtn.addEventListener('click', () => {
-        // Adiciona a classe para ocultar elementos de UI durante a impressão
         document.body.classList.add('print-mode');
         console.log('PDF gerando. Modo de impressão ativado.');
 
@@ -399,9 +493,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 heightLeft -= pdfHeight;
             }
 
-            pdf.save('Orcamento_SUPPORTA.pdf');
+            // Nome do arquivo PDF: "SUPPORTA_YYYY-MM-DD.pdf"
+            const companyName = "SUPPORTA";
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const fileName = `${companyName}_${year}-${month}-${day}.pdf`;
+            pdf.save(fileName);
 
-            // Remove a classe para restaurar a UI
             document.body.classList.remove('print-mode');
             console.log('PDF gerado. Modo de impressão desativado.');
         });
@@ -620,7 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adiciona listeners para o cálculo em tempo real no modal
     productBasePriceInput.addEventListener('input', calculateAndDisplayFinalPrice);
-    profitSelect.addEventListener('change', calculateAndDisplayFinalPrice); // MODIFICADO: Listener para o select
+    profitSelect.addEventListener('change', calculateAndDisplayFinalPrice);
 
     confirmAddProductBtn.addEventListener('click', () => {
         const description = productDescriptionInput.value.trim();
@@ -645,15 +745,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (isNaN(unitPrice) || unitPrice <= 0) { // Alterado para <= 0, já que não pode ser 0 ou negativo
             alert('O valor final unitário deve ser um número positivo.');
-            // Não foca em input, já que é um display, mas pode dar um alerta.
             return;
         }
 
         const total = quantity * unitPrice;
 
         const newProduct = {
-            id: Date.now(),
-            budgetNum: nextProductNumber++,
+            id: Date.now(), // ID único para o produto (timestamp)
+            budgetNum: nextProductNumber++, // Número sequencial na tabela
             description: description,
             quantity: quantity,
             unitPrice: unitPrice,
@@ -661,17 +760,34 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         productsInBudget.push(newProduct);
-        addProductToBudgetTable(newProduct);
-        updateTotals(); // Chama updateTotals após adicionar o produto
+        renderProductTable(); // Renderiza a tabela novamente com o novo produto
         closeAllModals();
     });
 
     cancelAddProductBtn.addEventListener('click', () => {
         closeAllModals();
-        // clearAddProductModalFields() já é chamado quando o modal é aberto novamente
+    });
+
+    // --- Delegação de Eventos para a Tabela de Produtos (Editar/Excluir) ---
+    productTableBody.addEventListener('click', (event) => {
+        const target = event.target;
+        const row = target.closest('tr'); // Pega a linha mais próxima do botão clicado
+        if (!row) return; // Não é um botão de linha
+
+        const productId = row.dataset.productId; // Pega o ID do produto da linha
+
+        if (target.classList.contains('delete-product-btn')) {
+            deleteProduct(productId);
+        } else if (target.classList.contains('edit-product-btn')) {
+            enableEditMode(productId, row);
+        } else if (target.classList.contains('save-product-btn')) {
+            saveEditedProduct(productId, row);
+        } else if (target.classList.contains('cancel-edit-product-btn')) {
+            cancelEditMode(productId);
+        }
     });
 
     // --- Configuração Inicial ---
     setupInitialBudgetValues();
-    updateTotals(); // Garante que os totais são calculados no carregamento inicial
+    renderProductTable(); // Renderiza a tabela inicial (vazia) e os totais
 });
