@@ -179,12 +179,14 @@ body {
     white-space: nowrap;
 }
 
+/* Estilo para a última coluna (Total e Ações) */
 .product-table th:last-child,
 .product-table td:last-child {
     background-color: #212d42;
     color: white;
 }
 
+/* Alinhamento de colunas específicas */
 .product-table td:nth-child(1) { /* Coluna Nº */
     width: 30px;
     text-align: center;
@@ -199,6 +201,26 @@ body {
 .product-table th:nth-child(4), /* Header Qt. */
 .product-table th:nth-child(5) { /* Header Total */
     text-align: right;
+}
+
+/* Nova coluna de Ações */
+.product-table th.col-actions,
+.product-table td.col-actions {
+    text-align: center; /* Centraliza botões */
+    width: 150px; /* Largura para caber os botões */
+    padding: 5px; /* Ajusta padding para botões menores */
+    background-color: #212d42; /* Fundo escuro igual ao total */
+}
+
+/* Inputs dentro das células editáveis */
+.product-table td input[type="text"],
+.product-table td input[type="number"] {
+    width: calc(100% - 10px); /* Ajuste para padding */
+    padding: 3px 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 0.9em;
+    box-sizing: border-box;
 }
 
 /* Summary Section (Payment, Subtotal, Discount, Grand Total) */
@@ -339,6 +361,15 @@ body {
 }
 .action-button.secondary:hover {
     background-color: #5a6268;
+}
+
+/* Botões menores para a tabela de produtos */
+.small-button {
+    padding: 4px 8px; /* Reduz o padding */
+    font-size: 0.75em; /* Reduz a fonte */
+    margin: 2px; /* Espaçamento entre os botões */
+    display: inline-block; /* Garante que fiquem lado a lado */
+    white-space: nowrap; /* Impede que o texto quebre */
 }
 
 /* --- Modal Styles --- */
@@ -536,11 +567,12 @@ body {
 }
 
 .modal-form-fields .profit-options label {
-   display: block; /* Label acima do select */
+    display: block; /* Label acima do select */
     margin-bottom: 5px;
     font-weight: bold; /* Manter negrito para a label do select */
     color: #555;
 }
+
 .modal-form-fields select { /* NOVO: Estilo para o select */
     width: calc(100% - 20px); /* Mesma largura dos inputs */
     padding: 10px;
@@ -558,6 +590,7 @@ body {
     background-size: 12px;
     padding-right: 30px; /* Espaço para a seta */
 }
+
 .calculated-price-display {
     display: block; /* Ocupa a linha inteira */
     padding: 10px;
@@ -581,7 +614,9 @@ body.print-mode #accessAuthBtn,
 body.print-mode #logoutBtn,
 body.print-mode #auth-status,
 body.print-mode .main-action-buttons,
-body.print-mode .modal { /* Esconde modais se estiverem abertos */
+body.print-mode .modal, /* Esconde modais se estiverem abertos */
+body.print-mode .col-actions /* Esconde a coluna de ações na impressão */
+ { 
     display: none !important;
 }
 
