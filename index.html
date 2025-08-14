@@ -20,7 +20,7 @@
                 <div class="header-left-col">
                     <!-- Logo no canto esquerdo -->
                     <img src="logo-nova.png" alt="Logo da Empresa SUPPORTA" class="company-logo">
-                    <!-- NOVO: Palavra "Orçamento" agora aqui, abaixo da logo -->
+                    <!-- Palavra "Orçamento" agora aqui, abaixo da logo -->
                     <div class="budget-title-label">Orçamento</div>
                     <div class="client-contact-info">
                         <!-- Estas são as SPANS de exibição, preenchidas via JS -->
@@ -67,6 +67,7 @@
                         <th class="col-price">Preço</th>
                         <th class="col-quantity">Qt.</th>
                         <th class="col-total">Total</th>
+                        <th class="col-actions">Ações</th> <!-- NOVO: Coluna de Ações -->
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
@@ -81,20 +82,20 @@
                 <div class="total-boxes-container">
                     <div class="summary-box subtotal-box">
                         <span>Subtotal</span>
-                        <span class="value">R$<span id="subtotalAmount">0,00</span></span><!-- MODIFICADO -->
+                        <span class="value">R$<span id="subtotalAmount">0,00</span></span>
                     </div>
-                    <!-- NOVO: Contêiner para Desconto e Total -->
+                    <!-- Contêiner para Desconto e Total -->
                     <div class="discount-and-grand-total">
                         <div class="summary-box discount-box">
                             <span>Desconto</span>
                             <div class="discount-input-container">
-                                R$<span id="discountAmountDisplay" class="print-only-display"></span><!-- MODIFICADO -->
+                                R$<span id="discountAmountDisplay" class="print-only-display"></span>
                                 <input type="number" id="discountInput" value="0.00" step="0.01">
                             </div>
                         </div>
                         <div class="summary-box grand-total-box">
                             <span>Total</span>
-                            <span class="value">R$<span id="grandTotal">0,00</span></span><!-- MODIFICADO -->
+                            <span class="value">R$<span id="grandTotal">0,00</span></span>
                         </div>
                     </div>
                 </div>
@@ -164,8 +165,8 @@
         </div>
     </div>
 
-     <!-- Modal para Adicionar Produto Manualmente -->
-   <div id="addProductModal" class="modal">
+    <!-- Modal para Adicionar Produto Manualmente -->
+    <div id="addProductModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Adicionar Produto ao Orçamento</h2>
@@ -176,14 +177,14 @@
                 <label for="productQuantityInput">Quantidade:</label>
                 <input type="number" id="productQuantityInput" value="1" min="1" required>
 
-                <label for="productBasePriceInput">Valor de Custo (R\$):</label>
+                <label for="productBasePriceInput">Valor de Custo (R$):</label>
                 <input type="number" id="productBasePriceInput" value="0.00" min="0" step="0.01" required>
 
                 <div class="profit-options">
                     <label for="profitSelect">Opção de Lucro:</label>
-                    <select id="profitSelect"> <!-- MODIFICADO: Agora é um <select> -->
+                    <select id="profitSelect">
                         <option value="0.05">5% Lucro</option>
-                        <option value="0.10" selected>10% Lucro</option> <!-- 10% selecionado por padrão -->
+                        <option value="0.10" selected>10% Lucro</option>
                         <option value="0.15">15% Lucro</option>
                         <option value="0.20">20% Lucro</option>
                         <option value="0.25">25% Lucro</option>
@@ -192,7 +193,7 @@
                     </select>
                 </div>
                 
-                <label>Valor Final (Unitário - R\$):</label>
+                <label>Valor Final (Unitário - R$):</label>
                 <span id="productFinalPriceDisplay" class="calculated-price-display">0,00</span>
             </div>
             <div class="modal-actions">
