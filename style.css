@@ -1,5 +1,4 @@
-/* Importa a fonte Montserrat do Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap');
+/* Removido: @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap'); */
 
 /* General Body and Container Styles */
 @page {
@@ -115,13 +114,14 @@ body {
     font-size: 20pt;
     font-weight: 700;
     color: #333;
-    margin-bottom: 80px; /* Aumentado o espaço abaixo da Data para descer o Nº O.S. */
+    /* Removido: margin-bottom: 80px; - este margin empurrava o nº O.S. para baixo, agora a data fica abaixo do nº O.S. e não precisa empurrar nada. */
 }
 
 .budget-number {
     font-size: 14pt;
     font-weight: 700;
     color: #333;
+    margin-bottom: 5px; /* Adiciona um pequeno espaço abaixo do número da O.S. para separá-lo da data */
 }
 
 /* Main Action Buttons Container */
@@ -626,6 +626,10 @@ body {
     margin-bottom: 15px;
 }
 
+/* Nova classe para elementos que devem ser inicialmente escondidos */
+.hidden {
+    display: none;
+}
 
 /* --- ESTILOS PARA MODO DE IMPRESSÃO --- */
 /* Adiciona esta classe ao <body> para controlar a visibilidade dos elementos */
